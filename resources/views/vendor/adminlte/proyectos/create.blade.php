@@ -13,14 +13,27 @@
                                 title="Collapse">
                         <i class="fa fa-minus"></i></button>
                     </div>
+
                 </div>
+
                 <div class="box-body">
-                  <form class="" action="{{route('proyectos.store')}}" method="post">
+                  <div class="row">
+                      <div class="col-sm-6 col-xs-12">
+                          <a class="btn btn-app bg-red" href="{{ route('proyectos.index') }}" v-on:click="loader">
+                              <i class="fa fa-reply"></i> Volver
+                          </a>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <hr style="margin:0 0 10px 0;">
+                  </div>
+                  <form class="" action="{{route('proyectos.store')}}" method="post" enctype="multipart/form-data">
+                    {{ csrf_field() }}
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="form-group{{ $errors->has('fact_1') ? ' has-warning' : '' }}">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" name="fact_1" value="asdf" style="display:none">
+                                        {{-- <input type="text" class="form-control" name="fact_1" value="asdf" style="display:none"> --}}
                                     </div>
                                 </div>
                             </div>
@@ -49,8 +62,8 @@
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                               <div class="form-group{{ $errors->has('programa_id') ? ' has-warning' : '' }}">
-                                  <label>Carrera</label>
-                                  <select id="selectCarrera" class="form-control" name="carrera_id">
+                                  <label>CARRERA</label>
+                                  <select id="selectCarrera" class="form-control" name="carrera">
                                       <option value="" selected>Seleccionar</option>
                                       @foreach($carreras as $carrera)
                                           <option value="{{ $carrera->id }}" @if($carrera->id == old('id')) @endif>{{ $carrera->name }}</option>
@@ -67,7 +80,10 @@
                                 <div class="form-group{{ $errors->has('tutor_user_id') ? ' has-warning' : '' }}">
                                     <label>TUTOR</label>
                                     <select id="selectTutor" class="form-control" name="tutor">
-                                      <option value=""selected>Seleccionar</option>
+                                      <option value="" selected>Seleccionar</option>
+                                      @foreach ($user as $users)
+                                        <option value="{{$users->id}}">{{$users->nombre}}</option>
+                                      @endforeach
                                     </select>
                                     @if ($errors->has('tutor_user_id'))
                                         <span class="help-block">
@@ -80,8 +96,9 @@
                         <div class="row">
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <div class="form-group{{ $errors->has('tutor_user_id') ? ' has-warning' : '' }}">
-                                <label>COMPAÑERO</label>
-                                <select id="selectautor" class="form-control js-example-basic-single" name="coautor" v-model="tutor">
+                                <label>COAUTOR</label>
+                                <select id="selectautor" class="form-control" name="coautor">
+                                  <option value="" selected>Seleccionar</option>
                                   @foreach ($user as $users)
                                     <option value="{{$users->id}}">{{$users->nombre}}</option>
                                   @endforeach
@@ -127,8 +144,15 @@
                             </div>
                             <div class="col-xs-12">
                                 <div class="form-group{{ $errors->has('documento') ? ' has-warning' : '' }}">
-                                    <label>DOCUMENTO</label>
-                                    <input  type="file" name="documento"  accept="application/pdf">
+                                    {{-- <label>DOCUMENTO</label> --}}
+                                    <label for="file-upload" class="btn btn-app bg-blue">
+                                        <i class="fa fa-upload"></i>Subir archivo
+                                    </label>
+                                    <input id="file-upload" onchange='cambiar()' type="file" style='display: none;' name='documento' accept="application/pdf"/>
+                                    <span id="info"></span>
+                                    {{-- <input type="file" name="documento"  accept="application/pdf" class="file-input"> --}}
+
+
                                     @if ($errors->has('documento'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('documento') }}</strong>

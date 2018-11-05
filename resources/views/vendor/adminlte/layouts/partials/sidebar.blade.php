@@ -8,10 +8,10 @@
         @if (! Auth::guest())
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="{{ Gravatar::get($user->email) }}" class="img-circle" alt="User Image" />
+                    <img src="{{ Gravatar::get(Auth::user()->email) }}" class="img-circle" alt="User Image" />
                 </div>
                 <div class="pull-left info">
-                    <p style="overflow: hidden;text-overflow: ellipsis;max-width: 160px;" data-toggle="tooltip" title="{{ Auth::user()->name }}">{{ Auth::user()->name }}</p>
+                    <p style="overflow: hidden;text-overflow: ellipsis;max-width: 160px;" data-toggle="tooltip" title="{{ Auth::user()->nombre }}">{{ Auth::user()->nombre }}</p>
                     <!-- Status -->
                     <a href="#"><i class="fa fa-circle text-success"></i> {{ trans('adminlte_lang::message.online') }}</a>
                 </div>
@@ -19,29 +19,45 @@
         @endif
 
         <!-- search form (Optional) -->
-        <form action="#" method="get" class="sidebar-form">
+        {{-- <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="{{ trans('adminlte_lang::message.search') }}..."/>
               <span class="input-group-btn">
                 <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
               </span>
             </div>
-        </form>
+        </form> --}}
         <!-- /.search form -->
 
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">{{ trans('adminlte_lang::message.header') }}</li>
-            <!-- Optionally, you can add icons to the links -->
-            <li class="active"><a href="{{ url('home') }}"><i class='fa fa-link'></i> <span>{{ trans('adminlte_lang::message.home') }}</span></a></li>
-            <li><a href="#"><i class='fa fa-link'></i> <span>{{ trans('adminlte_lang::message.anotherlink') }}</span></a></li>
-            <li class="treeview">
-                <a href="#"><i class='fa fa-link'></i> <span>{{ trans('adminlte_lang::message.multilevel') }}</span> <i class="fa fa-angle-left pull-right"></i></a>
-                <ul class="treeview-menu">
-                    <li><a href="#">{{ trans('adminlte_lang::message.linklevel2') }}</a></li>
-                    <li><a href="#">{{ trans('adminlte_lang::message.linklevel2') }}</a></li>
-                </ul>
-            </li>
+          <li class="header"><strong>MENU</strong></li>
+          <!-- Optionally, you can add icons to the links -->
+          <li class="active"><a href="{{ url('home') }}"><i class='fa fa-link'></i> <span>Home</span></a></li>
+          <li><a href=""><i class='fa fa-cog'></i> <span>Perfil</span></a></li>
+          <li><a href="{{ route('proyectos.index') }}"><i class='fa fa-cog'></i> <span>@if(Auth::user()->id == 2) Mis @endif Proyectos</span></a></li>
+          <li class="treeview">
+              <a href="#"><i class='fa fa-link'></i> <span>Anexos</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+                  <li><a href="#">{{ trans('adminlte_lang::message.linklevel2') }}</a></li>
+                  <li><a href="#">{{ trans('adminlte_lang::message.linklevel2') }}</a></li>
+              </ul>
+          </li>
+          <li class="header"><strong>ADMIN</strong></li>
+          <li class="treeview">
+              <a href="#"><i class='fa fa-link'></i> <span>Usuarios</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+                <li><a href="{{ route('user.index') }}"><i class='fa fa-cog'></i><span>Lista de Usuarios</span></a></li>
+                <li><a href="{{ route('tutor.index') }}"><i class='fa fa-cog'></i><span>Lista de Tutores</span></a></li>
+              </ul>
+          </li>
+          <li class="treeview">
+              <a href="#"><i class='fa fa-link'></i> <span>Usuarios</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+                <li><a href="{{ route('carreras.index') }}"><i class='fa fa-cog'></i><span>Lista de Carreras</span></a></li>
+                <li><a href="{{ route('periodos.index') }}"><i class='fa fa-cog'></i><span>Periodo</span></a></li>
+              </ul>
+          </li>
         </ul><!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->

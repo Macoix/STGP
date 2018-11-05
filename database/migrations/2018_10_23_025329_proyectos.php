@@ -20,10 +20,10 @@ class Proyectos extends Migration
         $table->integer('carrera_id');
         $table->text('titulo');
         $table->text('resumen');
-        $table->string('documento')->nullable();
-        $table->string('fact_1_estado');
-        $table->string('fact_2')->nullable();
-        $table->string('fact_2_estado')->nullable();
+        $table->string('anexo')->nullable();
+        $table->string('anexo_estado');
+        $table->string('tomo')->nullable();
+        $table->string('tomo_estado')->nullable();
         $table->string('veredicto')->nullable();
         $table->integer('proyecto_estado_id');
         $table->integer('user_id');

@@ -51,43 +51,55 @@
                                               <table class="table table-condensed table-hover">
                                                   <thead>
                                                       <th>ID</th>
-                                                      <th>NOMBRE</th>
-                                                      {{-- <th>APELLIDO</th> --}}
-                                                      <th>EMAIL</th>
-                                                      {{-- <th>ROL</th> --}}
-                                                      <th>CREADO</th>
-                                                      {{-- <th class="text-center">ESTATUS</th> --}}
-                                                      <th width="150" class="text-center">OPCIONES</th>
+                                                      <th>FECHA</th>
+                                                      <th>PROGRAMA</th>
+                                                      <th>TITULO</th>
+                                                      <th>AUTOR</th>
+                                                      <th>COAUTOR</th>
+                                                      <!--<th class="text-center">ESTADO</th>-->
+                                                      <th width="180" class="text-center">OPCIONES</th>
                                                   </thead>
                                                   <tbody>
-                                                      @foreach ($users as $user)
+                                                      @foreach($proyectos as $proyecto)
                                                           <tr>
-                                                              <td>{{ $user->id }}</td>
-                                                              <td>{{ $user->name }}</td>
-                                                              {{-- <td>{{ $user->apellidos }}</td> --}}
-                                                              <td>{{ $user->email }}</td>
-                                                              {{-- <td>{{ $user->rol }}</td> --}}
-                                                              <td>{{ date('d/m/Y', strtotime($user->created_at)) }}</td>
-                                                              {{-- <td class="text-center">
-                                                                  @if($user->estado == 'activo')
-                                                                      <span class="label label-success">ACTIVO</span>
+                                                              <td>{{ $proyecto->id }}</td>
+                                                              <td>{{ date('d/m/Y', strtotime($proyecto->created_at)) }}</td>
+                                                              <td>{{ $proyecto->carrera->name }}</td>
+                                                              <td>{{ $proyecto->titulo }}</td>
+                                                              <td>{{ $proyecto->autor->nombre }} {{ $proyecto->autor->apellido }}</td>
+                                                              <td>{{$proyecto->coautor->nombre}}<br>{{ $proyecto->coautor->apellido }}</td>
+                                                              <!--<td>
+                                                                  @if($proyecto->estado == 'pendiente_evaluacion_comite')
+                                                                      <span class="label label-warning">PENDIENTE POR EVALUACION DE COMITE</span>
+                                                                  @elseif($proyecto->estado == 'evaluado_comite')
+                                                                      <span class="label label-success">EVALUADO POR COMITE</span>
+                                                                  @elseif($proyecto->estado == 'aprobado_comite')
+                                                                      <span class="label label-success">APROBADO POR COMITE</span>
+                                                                  @elseif($proyecto->estado == 'pendiente_asignacion_jurado')
+                                                                      <span class="label label-warning">PENDIENTE DE ASIGNACION DE JURADO</span>
+                                                                  @elseif($proyecto->estado == 'pendiente_revision_jurado')
+                                                                      <span class="label label-warning">PENDIENTE POR REVISION DE ASIGNACION DE JURADO</span>
+                                                                  @elseif($proyecto->estado == 'jurado_aprobado')
+                                                                      <span class="label label-success">JURADO APROBADO</span>
+                                                                  @elseif($proyecto->estado == 'pendiente_evaluacion_jurado')
+                                                                      <span class="label label-warning">PENDIENTE POR EVALUACION DE JURADO</span>
                                                                   @else
-                                                                      <span class="label label-warning">INACTIVO</span>
+                                                                      <span class="label label-warning">{{ $proyecto->estado }}</span>
                                                                   @endif
-                                                              </td> --}}
+                                                              </td>-->
                                                               <td>
-                                                                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                                      <a class="btn btn-link btn-flat btn-sm" href="{{ URL::action('UserController@show', $user->user_id) }}" data-placement="top" title="DETALLES"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                                                  <div class="col-sm-4 col-xs-12">
+                                                                      <a class="btn btn-link btn-flat btn-md" href="{{route('proyectos.show',$proyecto->proyecto_id)}}" data-placement="top" title="DETALLES"><span class="glyphicon glyphicon-eye-open"></span></a>
                                                                   </div>
-                                                                  {{-- @can('edit_users') --}}
-                                                                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                                          <a style="color: #D68A10;" class="btn btn-link btn-flat btn-sm" href="" data-placement="top" title="EDITAR"><span class="glyphicon glyphicon-edit"></span></a>
+                                                                  {{-- @can('edit_proyectos') --}}
+                                                                      <div class="col-sm-4 col-xs-12">
+                                                                          <a style="color: #D68A10;" class="btn btn-link btn-flat btn-md" href="" data-placement="top" title="EDITAR"><span class="glyphicon glyphicon-edit"></span></a>
                                                                       </div>
                                                                   {{-- @endcan --}}
-                                                                  {{-- @can('delete_users') --}}
-                                                                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                                          <button style="color: #C34233" class="btn btn-link btn-flat btn-sm" data-target="#modal-delete-{{ $user->user_id }}" data-toggle="modal" data-placement="top" title="ELIMINAR" @if($user->id == 1) disabled @endif><span class="glyphicon glyphicon-remove"></span></button>
-                                                                          {{-- @include('back_office.pages.panel_control.access.usuarios.modal_delete') --}}
+                                                                  {{-- @can('delete_proyectos') --}}
+                                                                      <div class="col-sm-4 col-xs-12">
+                                                                          <button style="color:#C34233" class="btn btn-link btn-flat btn-md" data-target="#modal-delete-{{ $proyecto->proyecto_id }}" data-toggle="modal" data-placement="top" title="ELIMINAR"><span class="glyphicon glyphicon-remove"></span></button>
+                                                                          {{-- @include('back_office.pages.menu.proyectos.modal_delete') --}}
                                                                       </div>
                                                                   {{-- @endcan --}}
                                                               </td>
@@ -95,7 +107,7 @@
                                                       @endforeach
                                                   </tbody>
                                               </table>
-                                          </div>                                        
+                                          </div>
                                       </div>
                                   {{-- @else
                                       @include('back_office.includes.result_alert') --}}

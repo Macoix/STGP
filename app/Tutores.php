@@ -20,11 +20,7 @@ class Tutores extends Model
 
   public function carrera()
   {
-    return $this->hasMany('App\Carrera','carrera_id');
+    return $this->belongsTo('App\Carrera','carrera_id');
   }
 
-  public static function tutor($id){
-    return Tutores::where('carrera_id','=',$id)
-    ->get();
-  }
 }
