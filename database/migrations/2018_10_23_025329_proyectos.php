@@ -15,6 +15,8 @@ class Proyectos extends Migration
     {
       Schema::create('proyectos', function (Blueprint $table) {
         $table->increments('proyecto_id');
+        $table->integer('periodo_id');
+        $table->string('codigo');
         $table->string('tipo');
         $table->integer('tutor_user_id');
         $table->integer('carrera_id');
@@ -24,9 +26,11 @@ class Proyectos extends Migration
         $table->string('anexo_estado');
         $table->string('tomo')->nullable();
         $table->string('tomo_estado')->nullable();
+        $table->string('tomo2')->nullable();
+        $table->string('tomo2_estado')->nullable();
         $table->string('veredicto')->nullable();
-        $table->integer('proyecto_estado_id');
-        $table->integer('user_id');
+        $table->integer('proyecto_estado_id')->unsigned();
+        $table->integer('user_id')->unsigned();
         $table->integer('second_user_id');
         $table->timestamps();
       });

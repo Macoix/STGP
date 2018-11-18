@@ -15,7 +15,7 @@
                       <i class="fa fa-minus"></i></button>
                   </div>
               </div>
-              <div class="box-body">                  
+              <div class="box-body">
                   <div class="row">
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                           {{-- @can('create_users') --}}
@@ -59,7 +59,7 @@
                                                       @foreach ($carreras as $carrera)
                                                           <tr>
                                                               <td>{{ $carrera->id }}</td>
-                                                              <td>{{ $carrera->nombre }}</td>
+                                                              <td>{{ $carrera->name }}</td>
                                                               <td>{{ $carrera->acronimo }}</td>
                                                               <td>{{ $carrera->user->nombre }}</td>
                                                               {{-- <td>{{ $carrera->rol }}</td> --}}

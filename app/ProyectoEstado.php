@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class ProyectoEstado extends Model
 {
   protected $table = 'proyectos_estados';
-  protected $primaryKey = 'id';
+  protected $primaryKey = 'proyecto_estado_id';
   protected $fillable = [
-      'id',
+      'proyecto_estado_id',
       'nombre',
       'proyecto_id',
       'comentario',

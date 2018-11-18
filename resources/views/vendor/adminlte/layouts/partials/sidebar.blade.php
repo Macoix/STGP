@@ -8,7 +8,7 @@
         @if (! Auth::guest())
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="{{ Gravatar::get(Auth::user()->email) }}" class="img-circle" alt="User Image" />
+                    <img src="{{asset('img\user8-128x128.jpg')}}" class="img-circle" alt="User Image" />
                 </div>
                 <div class="pull-left info">
                     <p style="overflow: hidden;text-overflow: ellipsis;max-width: 160px;" data-toggle="tooltip" title="{{ Auth::user()->nombre }}">{{ Auth::user()->nombre }}</p>
@@ -36,13 +36,6 @@
           <li class="active"><a href="{{ url('home') }}"><i class='fa fa-link'></i> <span>Home</span></a></li>
           <li><a href=""><i class='fa fa-cog'></i> <span>Perfil</span></a></li>
           <li><a href="{{ route('proyectos.index') }}"><i class='fa fa-cog'></i> <span>@if(Auth::user()->id == 2) Mis @endif Proyectos</span></a></li>
-          <li class="treeview">
-              <a href="#"><i class='fa fa-link'></i> <span>Anexos</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-                  <li><a href="#">{{ trans('adminlte_lang::message.linklevel2') }}</a></li>
-                  <li><a href="#">{{ trans('adminlte_lang::message.linklevel2') }}</a></li>
-              </ul>
-          </li>
           <li class="header"><strong>ADMIN</strong></li>
           <li class="treeview">
               <a href="#"><i class='fa fa-link'></i> <span>Usuarios</span> <i class="fa fa-angle-left pull-right"></i></a>

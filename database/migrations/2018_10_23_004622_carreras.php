@@ -20,6 +20,7 @@ class Carreras extends Migration
             $table->String('coordinador_user_id');
             $table->String('estado');
             $table->timestamps();
+
         });
     }
 

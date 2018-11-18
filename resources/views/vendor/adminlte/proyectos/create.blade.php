@@ -81,8 +81,8 @@
                                     <label>TUTOR</label>
                                     <select id="selectTutor" class="form-control" name="tutor">
                                       <option value="" selected>Seleccionar</option>
-                                      @foreach ($user as $users)
-                                        <option value="{{$users->id}}">{{$users->nombre}}</option>
+                                      @foreach ($tutores as $tutor)
+                                        <option value="{{ $tutor->id }}">{{ $tutor->users->nombre }} {{ $tutor->users->apellido }}</option>
                                       @endforeach
                                     </select>
                                     @if ($errors->has('tutor_user_id'))
@@ -97,10 +97,10 @@
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <div class="form-group{{ $errors->has('tutor_user_id') ? ' has-warning' : '' }}">
                                 <label>COAUTOR</label>
-                                <select id="selectautor" class="form-control" name="coautor">
+                                <select id="selectautor" class="form-control selectautor" name="coautor">
                                   <option value="" selected>Seleccionar</option>
                                   @foreach ($user as $users)
-                                    <option value="{{$users->id}}">{{$users->nombre}}</option>
+                                    <option value="{{$users->id}}">{{$users->nombre}} {{$users->apellido}}</option>
                                   @endforeach
                                 </select>
                                 @if ($errors->has('tutor_user_id'))
@@ -144,7 +144,7 @@
                             </div>
                             <div class="col-xs-12">
                                 <div class="form-group{{ $errors->has('documento') ? ' has-warning' : '' }}">
-                                    {{-- <label>DOCUMENTO</label> --}}
+                                    <label>DOCUMENTO</label> <br>
                                     <label for="file-upload" class="btn btn-app bg-blue">
                                         <i class="fa fa-upload"></i>Subir archivo
                                     </label>

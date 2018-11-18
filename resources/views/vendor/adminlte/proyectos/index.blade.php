@@ -50,7 +50,7 @@
                                           <div class="table-responsive">
                                               <table class="table table-condensed table-hover">
                                                   <thead>
-                                                      <th>ID</th>
+                                                      <th>Codigo</th>
                                                       <th>FECHA</th>
                                                       <th>PROGRAMA</th>
                                                       <th>TITULO</th>
@@ -62,7 +62,7 @@
                                                   <tbody>
                                                       @foreach($proyectos as $proyecto)
                                                           <tr>
-                                                              <td>{{ $proyecto->id }}</td>
+                                                              <td>{{ $proyecto->codigo }}</td>
                                                               <td>{{ date('d/m/Y', strtotime($proyecto->created_at)) }}</td>
                                                               <td>{{ $proyecto->carrera->name }}</td>
                                                               <td>{{ $proyecto->titulo }}</td>

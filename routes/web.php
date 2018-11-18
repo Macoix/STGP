@@ -43,6 +43,20 @@ Route::post('proyectos/almacenar','ProyectosController@store')->name('proyectos.
 Route::get('proyectos/ver/{id}','ProyectosController@show')->name('proyectos.show');
 Route::get('proyectos/ver/documentos/{document}', 'ProyectosController@document');
 Route::post('proyectos/ver/validacion_anexo/{id}','ProyectosController@validacion_anexo')->name('proyectos.anexo');
+Route::post('proyectos/ver/subida_tomo/{id}','ProyectosController@subirTomo1')->name('proyectos.tomo');
+Route::get('proyectos/ver/documentos2/{document}', 'ProyectosController@document2');
+Route::post('proyecto/actualizar/{id}','ProyectosController@update')->name('proyectos.update');
+Route::get('proyectos/editar/{id}','ProyectosController@edit')->name('proyectos.edit');
+Route::post('proyectos/almacenar/comite/{id}', 'ProyectoEvaluacionesComiteController@store')->name('proyectos.comite');
+Route::post('proyectos/almacenar/evaluacion/{id}', 'ProyectoEvaluacionesComiteController@aprobar')->name('proyectos.aprobar');
+Route::post('proyectos/ver/subida_tomo2/{id}','ProyectosController@subirTomo2')->name('proyectos.tomo2');
+Route::get('proyectos/jurados/crear/{id}','ProyectoJuradosController@create')->name('jurados.create');
+Route::get('proyectos/ver/documentos3/{document}', 'ProyectosController@document3');
+Route::post('proyectos/almacenar/jurados/{id}','ProyectoJuradosController@store')->name('jurados.store');
+Route::post('proyectos/veredicto/{id}','ProyectosController@veredicto')->name('proyectos.veredicto');
+
+
+
 
 Route::get('carreras','CarrerasController@index')->name('carreras.index');
 Route::get('carreras/crear','CarrerasController@create')->name('carreras.create');

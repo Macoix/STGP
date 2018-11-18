@@ -87,20 +87,20 @@
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="max-width: 280px;white-space: nowrap;overflow: hidden;overflow-text: ellipsis">
                             <!-- The user image in the navbar-->
-                            <img src="{{ Gravatar::get(Auth::user()->email) }}" class="user-image" alt="User Image"/>
+                            <img src="{{asset('img\user8-128x128.jpg')}}" class="user-image" alt="User Image" />
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
                             <span class="hidden-xs" data-toggle="tooltip" title="{{ Auth::user()->nombre }}">{{ Auth::user()->nombre }}</span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
                             <li class="user-header">
-                                <img src="{{ Gravatar::get(Auth::user()->email) }}" class="img-circle" alt="User Image" />
+                                <img src="{{asset('img\user8-128x128.jpg')}}" class="img-circle" alt="User Image" />
                                 <p>
-                                    <span data-toggle="tooltip" title="{{ Auth::user()->nombre }}">{{ Auth::user()->nombre }} </span>
+                                    <span data-toggle="tooltip" title="{{ Auth::user()->nombre }}">{{ Auth::user()->nombre }} {{ Auth::user()->apellido }} </span>
 
                                     <small>Miembro Desde:
                                       @if(Auth::user()->created_at == '')
-                                        Tiempos Inmemorables
+                                        Tiempos Inmemorables jeje
                                       @else
                                         {{(Auth::user()->created_at)}}
                                       @endif

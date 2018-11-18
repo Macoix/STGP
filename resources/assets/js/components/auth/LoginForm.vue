@@ -1,6 +1,6 @@
 <template>
  <form method="post" @submit.prevent="submit" @keydown="clearErrors($event.target.name)">
-  <div class="alert alert-success text-center" v-show="form.succeeded" id="result"> {{ trans('adminlte_lang_message.loggedin') }} <i class="fa fa-refresh fa-spin"></i> {{ trans('adminlte_lang_message.entering') }}</div>
+  <div class="alert alert-success text-center" v-show="form.succeeded" id="result"> ¿Exito! <i class="fa fa-refresh fa-spin"></i> Entrando!</div>
   <div class="form-group has-feedback" :class="{ 'has-error': form.errors.has('email') }" v-if="type === 'email'">
    <input type="email" class="form-control" :placeholder="placeholder" :name="name" value="" v-model="form.email" @change="adddomain" autofocus/>
    <span class="glyphicon form-control-feedback" :class="[icon]"></span>
@@ -29,12 +29,12 @@
    <div class="col-xs-8">
     <div class="checkbox icheck">
      <label>
-      <input type="checkbox" name="remember" v-model="form.remember"> {{ trans('adminlte_lang_message.remember') }}
+      <input type="checkbox" name="remember" v-model="form.remember"> Recuerdame
      </label>
     </div>
    </div>
    <div class="col-xs-4">
-    <button type="submit" class="btn btn-primary btn-block btn-flat" v-text="trans('adminlte_lang_message.buttonsign')" :disabled="form.errors.any()"><i v-if="form.submitting" class="fa fa-refresh fa-spin"></i></button>
+    <button type="submit" class="btn btn-primary btn-block btn-flat" v-text="Entrar" :disabled="form.errors.any()"><i v-if="form.submitting" class="fa fa-refresh fa-spin"></i></button>
    </div>
   </div>
  </form>

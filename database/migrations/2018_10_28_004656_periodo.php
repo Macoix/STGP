@@ -15,11 +15,10 @@ class Periodo extends Migration
     {
       Schema::create('periodos', function (Blueprint $table) {
         $table->increments('id');
-        $table->String('facultad');
-        $table->String('carrera_id');
-        $table->String('ano');
-        $table->String('periodo');
-        $table->String('estado');
+        $table->string('facultad');
+        $table->string('ano');
+        $table->string('periodo');
+        $table->string('estado');
         $table->timestamps();
       });
     }

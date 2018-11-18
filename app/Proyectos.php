@@ -6,14 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Proyectos extends Model
 {
-  protected $primarykey = 'proyecto_id';
+  protected $table = 'proyectos';
+  protected $primaryKey = 'proyecto_id';
   protected $fillable = [
+    'periodo_id',
+    'codigo',
     'tipo',
     'tutor_user_id',
     'carrera_id',
     'titulo',
     'resumen',
-    'documento',
     'anexo',
     'anexo_estado',
     'tomo',
@@ -38,4 +40,9 @@ class Proyectos extends Model
   {
     return $this->belongsTo('App\User','second_user_id');
   }
+
+  // public function estado()
+  // {
+  //   return $this->belongsTo('App\ProyectoEstado','proyecto_estado_id');
+  // }
 }

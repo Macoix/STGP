@@ -9,7 +9,7 @@
     <div id="app" v-cloak>
         <div class="login-box">
             <div class="login-logo">
-                <a href="{{ url('/home') }}"><b>Admin</b>LTE</a>
+                <span class="logo-mini"><img src="{{ asset('img/Logo-UJAP2.png') }}" width="40px" alt=""></span>&nbsp;<a href="{{ url('/home') }}"><b>STGP</b>-UJAP</a>
             </div><!-- /.login-logo -->
 
         @if (count($errors) > 0)
@@ -24,15 +24,13 @@
         @endif
 
         <div class="login-box-body">
-        <p class="login-box-msg"> {{ trans('adminlte_lang::message.siginsession') }} </p>
+        <p class="login-box-msg"> Inicie su sesion para poder  </p>
 
         <login-form name="{{ config('auth.providers.users.field','email') }}"
                     domain="{{ config('auth.defaults.domain','') }}"></login-form>
 
-        @include('adminlte::auth.partials.social_login')
-
-        <a href="{{ url('/password/reset') }}">{{ trans('adminlte_lang::message.forgotpassword') }}</a><br>
-        <a href="{{ url('/register') }}" class="text-center">{{ trans('adminlte_lang::message.registermember') }}</a>
+        <a href="{{ url('/password/reset') }}">¿Olvidaste tu password?</a><br>
+        <a href="{{ url('/register') }}" class="text-center">¿Aún no eres miembro?</a>
 
     </div>
 

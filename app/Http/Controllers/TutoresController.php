@@ -52,7 +52,7 @@ class TutoresController extends Controller
         'carrera_id' => $request['carreraid'],
         'user_id' => $request['userid']
       ]);
-      dd($tutores);
+      // dd($tutores);
       $tutores->save();
       return redirect()->route('tutor.index');
     }

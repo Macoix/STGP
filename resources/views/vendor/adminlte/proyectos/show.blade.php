@@ -1,8 +1,8 @@
 @extends('adminlte::layouts.app')
-@section('title','Lista de proyectos')
+@section('title','Timeline de projecto')
 @section('main-content')
   @section('contentheader_title', 'PROYECTOS')
-  <div class="container">
+  <div class="">
       {{-- @include('back_office.pages.menu.proyectos.common.header') --}}
       <section class="content">
           {{-- @include('back_office.includes.notifications') --}}
@@ -67,11 +67,11 @@
                                       </div>
                                       <div class="col-sm-6 col-xs-12">
                                           <div class="col-sm-offset-6 col-sm-6 col-xs-12 text-right">
-                                              <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@document', $proyecto[0]->documento) }}" target="_blank" v-on:click="loader">
+                                              <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@document', $proyecto[0]->anexo) }}" target="_blank" v-on:click="loader">
                                                   <i class="fa fa-cloud-download"></i> Documento
                                               </a>
                                               {{-- @can('edit_proyectos') --}}
-                                                  <a class="btn btn-app bg-yellow" href="" v-on:click="loader">
+                                                  <a class="btn btn-app bg-yellow" href="{{route('proyectos.edit', $proyecto[0]->proyecto_id)}}" v-on:click="loader">
                                                       <i class="fa fa-edit"></i> Editar
                                                   </a>
                                               {{-- @endcan --}}
@@ -103,7 +103,7 @@
                           <i class="fa fa-user bg-aqua"></i>
                           <div class="timeline-item">
                               <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($proyecto[0]->created_at)) }}</span>
-                              <h3 class="timeline-header no-border"><strong> PENDIENTE POR APROBACION DE ANEXO{{ $proyecto[0]->anexo_pendiente }}</strong></h3>
+                              <h3 class="timeline-header no-border"><strong> PENDIENTE POR APROBACION DE ANEXO</strong></h3>
                               {{-- @can('validation_fact_1') --}}
                                   <div class="timeline-footer">
                                       <div class="row">
@@ -126,11 +126,13 @@
                                                 						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 							<div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
                                                 								<label>ESTADO</label>
-                                                								<select style="width: 100%;" class="form-control select2" name="estado">
+                                                								<select style="width: 100%;" class="form-control select2" name="estado" id="estado_anexo">
                                                 									<option value="">Seleccionar</option>
                                                 									<option value="aprobar">APROBAR</option>
                                                 									<option value="rechazar">RECHAZAR</option>
                                                 								</select>
+                                                                <label>OBSERVACIONES</label>
+                                                                <textarea name="observaciones" rows="8" cols="80" id="anexo_observaciones" disabled></textarea>
                                                 							</div>
                                                 						</div>
                                                 					</div>
@@ -171,18 +173,18 @@
                                       <h3 class="timeline-header no-border"><strong>
                                           @if($proyecto[0]->tipo == 'trabajo_grado')
                                               TRABAJO DE GRADO
-                                          @elseif($proyecto[0]->tipo == 'trabajo_especial_grado')
-                                              TRABAJO ESPECIAL DE GRADO
-                                          @elseif($proyecto[0]->tipo == 'proyecto')
-                                              PROYECTO
+                                          @elseif($proyecto[0]->tipo == 'Pasantia')
+                                              Pasantia
+                                          @elseif($proyecto[0]->tipo == 'Extraordinario')
+                                              Semestre Extraordinario
                                           @endif
-                                          MODIFICADO.
+                                           - ANEXO MODIFICADO.
                                       </strong></h3>
                                   </div>
                               </li>
                           @endif
-                          @if($proyecto[0]->fact_1_estado == 'aprobada')
-                              @if($estado->nombre == 'fact_1_rechazada')
+                          @if($proyecto[0]->anexo_estado == 'rechazada')
+                              @if($estado->nombre == 'anexo_rechazado')
                                   <li class="time-label">
                                       <span class="bg-green">
                                           {{ date('d/m/Y', strtotime($estado->created_at)) }}
@@ -192,14 +194,18 @@
                                       <i class="fa fa-user bg-aqua"></i>
                                       <div class="timeline-item">
                                           <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
-                                          <h3 class="timeline-header"><strong>FACTURA RECHAZADA - {{ $estado->comentario }}</strong></h3>
+                                          <h3 class="timeline-header"><strong>ANEXO RECHAZADA</strong></h3>
                                           <div class="timeline-body">
-                                              <span style="color: red;">POR FAVOR VERIFICAR EL NUMERO DE FACTURA.</span>
+                                              <span style="color: red;">POR FAVOR VERIFIQUE SU ANEXO.</span><br><br>
+                                              <label>OBSERVACIONES:</label>
+                                              {{$estado->comentario}}
                                           </div>
                                       </div>
                                   </li>
                               @endif
-                              @if($estado->nombre == 'fact_1_aprobada')
+                            @endif
+                            @if($proyecto[0]->anexo_estado == 'aprobada')
+                              @if($estado->nombre == 'anexo_aprobado')
                                   <li class="time-label">
                                       <span class="bg-green">
                                           {{ date('d/m/Y', strtotime($estado->created_at)) }}
@@ -209,14 +215,166 @@
                                       <i class="fa fa-user bg-aqua"></i>
                                       <div class="timeline-item">
                                           <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
-                                          <h3 class="timeline-header no-border"><strong>FACTURA APROBADA</strong></h3>
+                                          <h3 class="timeline-header no-border"><strong>ANEXO APROBADO</strong></h3>
                                       </div>
+                                  </li>
+                                  <li>
+                                      <i class="fa fa-user bg-aqua"></i>
+                                      <div class="timeline-item">
+                                          <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
+                                          <h3 class="timeline-header no-border"><strong> PENDIENTE POR SUBIDA DE TOMO - 1</strong></h3>
+                                          {{-- @can('validation_fact_1') --}}
+                                              <div class="timeline-footer">
+                                                  <div class="row">
+                                                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                              <form action="{{route('proyectos.tomo', $proyecto[0]->proyecto_id)}}" method="post" autocomplete="off" enctype="multipart/form-data">
+                                                                @csrf
+                                                                <div class="row">
+                                                                  <div class="col-xs-12">
+                                                                    <small style="color: red;" class="" style="margin: 0 0 10px 0">*<b><u>NOTA</u></b>: Por favor, verifique que su titulo y objetivos sean iguales al Anexo. <br> De lo contrario, tendra altas posibilidades de ser rechazado su tomo, tome precauciones antes de subir el archivo.</small>
+                                                                    <hr style="margin:10px 0 10px 0;">
+
+                                                                    <div class="form-group{{ $errors->has('documento') ? ' has-warning' : '' }}">
+
+                                                                      <label for="file-upload" class="btn btn-app bg-blue">
+                                                                        <i class="fa fa-upload"></i>Subir archivo
+                                                                      </label>
+                                                                      <input id="file-upload" onchange='cambiar()' type="file" style='display: none;' name='documento' accept="application/pdf"/>
+                                                                      <span id="info"></span>
+                                                                      {{-- <input type="file" name="documento"  accept="application/pdf" class="file-input"> --}}
+
+
+                                                                      @if ($errors->has('documento'))
+                                                                        <span class="help-block">
+                                                                          <strong>{{ $errors->first('documento') }}</strong>
+                                                                        </span>
+                                                                      @endif
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                                <div class="row">
+
+                                                                  <hr style="margin:0 0 10px 0;">
+                                                                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
+
+                                                                      <button class="btn btn-app bg-green" type="button" data-target="#modal-validation" data-toggle="modal" @if($proyecto[0]->tomo_estado == 'pendiente') disabled @endif>
+                                                                          <i class="fa fa-save"></i> Guardar
+                                                                      </button>
+                                                                      <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-validation">
+                                                                          <div class="modal-dialog">
+                                                                              <div class="modal-content">
+                                                                                  <div class="modal-header">
+                                                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                          <span aria-hidden="true">×</span>
+                                                                                      </button>
+                                                                                  </div>
+                                                                                  <div class="modal-body">
+                                                                                      <div class="row">
+                                                                                          <div class="col-xs-12 text-center">
+                                                                                              <h4><strong>¿SEGURO QUE DESEA GUARDAR?</strong></h4>
+                                                                                          </div>
+                                                                                      </div>
+                                                                                  </div>
+                                                                                  <div class="modal-footer">
+
+                                                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                                        <button type="submit" class="btn btn-success btn-flat btn-block" v-on:click="loader"><strong>CONFIRMAR</strong></button>
+                                                                                    </div>
+                                                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                                        <button type="button" class="btn btn-danger btn-flat btn-block" data-dismiss="modal"><strong>CANCELAR</strong></button>
+                                                                                    </div>
+
+                                                                                  </div>
+                                                                              </div>
+                                                                          </div>
+                                                                      </div>
+                                                                  </div>
+
+                                                                </div>
+                                                            	</form>
+                                                            </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          {{-- @endcan --}}
                                   </li>
                               @endif
                               @if($estado->nombre == 'pendiente_evaluacion_comite')
-                                  @if(count($comite))
+                                <li class="time-label">
+                                    <span class="bg-green">
+                                        {{ date('d/m/Y', strtotime($estado->created_at)) }}
+                                    </span>
+                                </li>
+                                <li>
+                                    <i class="fa fa-file-pdf-o bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
+                                        <h3 class="timeline-header">
+                                            <strong>
+                                                DETALLES DEL
+                                                @if($proyecto[0]->tipo == 'trabajo_grado')
+                                                    TRABAJO DE GRADO
+                                                @elseif($proyecto[0]->tipo == 'pasantia')
+                                                    PASANTIA
+                                                @elseif($proyecto[0]->tipo == 'extraordinario')
+                                                    SEMESTRE EXTRAORDINARIO
+                                                @endif - TOMO 1
+                                            </strong>
+                                        </h3>
+                                        <div class="timeline-body">
+                                            <div class="row">
+                                                <div class="col-sm-6 col-xs-12">
+                                                    <h5><strong>AUTOR:</strong> {{ strtoupper($proyecto[0]->nombres_autor) }} {{ strtoupper($proyecto[0]->apellidos_autor) }}</h5>
+                                                    <h5><strong>COAUTOR:</strong> {{ strtoupper($proyecto[0]->nombres_coautor) }} {{ strtoupper($proyecto[0]->apellidos_coautor) }}</h5>
+                                                    <h5><strong>PROGRAMA:</strong> {{ strtoupper($proyecto[0]->carrera) }}</h5>
+                                                    <h5><strong>TIPO DE PROYECTO:</strong>
+                                                        @if($proyecto[0]->tipo == 'trabajo_grado')
+                                                            TRABAJO DE GRADO
+                                                        @elseif($proyecto[0]->tipo == 'pasantia')
+                                                            PASANTIA
+                                                        @elseif($proyecto[0]->tipo == 'extraordinario')
+                                                            SEMESTRE EXTRAORDINARIO
+                                                        @endif
+                                                    </h5>
+                                                    <h5><strong>TUTOR:</strong> {{ strtoupper($proyecto[0]->nombres_tutor) }} {{ strtoupper($proyecto[0]->apellidos_tutor) }}</h5>
+                                                </div>
+                                                <div class="col-sm-6 col-xs-12">
+                                                    <div class="col-sm-offset-6 col-sm-6 col-xs-12 text-right">
+                                                        <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@document2', $proyecto[0]->tomo) }}" target="_blank" v-on:click="loader">
+                                                            <i class="fa fa-cloud-download"></i> Documento
+                                                        </a>
+                                                        {{-- @can('edit_proyectos') --}}
+                                                            <a class="btn btn-app bg-yellow" href="" v-on:click="loader">
+                                                                <i class="fa fa-edit"></i> Editar
+                                                            </a>
+                                                        {{-- @endcan --}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <hr style="margin:0 0 10px 0;">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <h5><strong>TITULO:</strong></h5>
+                                                    <h5>{{ $proyecto[0]->titulo }}</h5>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <hr style="margin:0 0 10px 0;">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <h5><strong>RESUMEN:</strong></h5>
+                                                    <h5>{{ $proyecto[0]->resumen }}</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                  {{-- @if(count($comite))
                                       @foreach($comite as $com)
-                                          @if(Auth::user()->user_id == $com->user_id)
+                                          @if(Auth::user()->id == $com->id)
                                               <li>
                                                   <i class="fa fa-user bg-aqua"></i>
                                                   <div class="timeline-item">
@@ -225,9 +383,10 @@
                                                       <div class="timeline-footer">
                                                           <div class="row">
                                                               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                  <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@acta_invitacion_comite', [$proyecto[0]->proyecto_id]) }}" target="_blank" v-on:click="loader">
+                                                                  <a class="btn btn-app bg-blue" href="" target="_blank" v-on:click="loader">
                                                                       <i class="fa fa-cloud-download"></i> Descargar
                                                                   </a>
+                                                                  {{ URL::action('ProyectosController@acta_invitacion_comite', [$proyecto[0]->proyecto_id]) }}
                                                               </div>
                                                           </div>
                                                       </div>
@@ -235,7 +394,7 @@
                                               </li>
                                           @endif
                                       @endforeach
-                                  @endif
+                                  @endif --}}
                                   <li>
                                       <i class="fa fa-user bg-aqua"></i>
                                       <div class="timeline-item">
@@ -243,22 +402,65 @@
                                           <h3 class="timeline-header no-border"><strong>PENDIENTE POR EVALUACION DE COMITE</strong></h3>
                                           @if(count($comite))
                                               @foreach($comite as $com)
-                                                  @if(Auth::user()->user_id == $com->user_id)
-                                                      <div class="timeline-body">
-                                                          <div class="row">
-                                                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                  <a class="btn btn-app bg-green" href="@if(count($evaluaciones_comite) < 3) {{ URL::action('ProyectosEvaluacionesComiteController@create', [$proyecto[0]->proyecto_id, 1]) }} @endif" @if(count($evaluaciones_comite) < 3) disable @endif v-on:click="loader">
-                                                                      <i class="fa  fa-check-square-o"></i> Evaluar
-                                                                  </a>
-                                                              </div>
-                                                          </div>
-                                                      </div>
+                                                  @if(Auth::user()->id == $com->id)
+                                                    <div class="timeline-footer">
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <button class="btn btn-app bg-green" data-target="#modal-validation-fact_2" data-toggle="modal"  > <i class="fa fa-check-square-o"></i> Evaluar</button>
+                                                                  <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-validation-fact_2">
+                                                                    <form action="{{route('proyectos.comite', $proyecto[0]->proyecto_id)}}" method="post" autocomplete="off">
+                                                                      @csrf
+
+                                                                      <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                          <div class="modal-header">
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                              <span aria-hidden="true">×</span>
+                                                                            </button>
+                                                                            <h4 class="modal-title"><strong>APROBACION DE COMITE</strong></h4>
+                                                                          </div>
+                                                                          <div class="modal-body">
+                                                                            <div class="row">
+                                                                              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                                <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
+                                                                                  <label>ESTADO</label>
+                                                                                  <select style="width: 100%;" class="form-control" name="estado_comite">
+                                                                                    <option value="">Seleccionar</option>
+                                                                                    <option value="aprobar">APROBAR</option>
+                                                                                    <option value="rechazar">RECHAZAR</option>
+                                                                                  </select>
+                                                                                  <label>OBSERVACIONES</label>
+                                                                                  <textarea name="observaciones_comite" rows="8" cols="80" ></textarea>
+                                                                                </div>
+                                                                              </div>
+                                                                            </div>
+                                                                          </div>
+                                                                          <div class="modal-footer">
+                                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                                <button type="submit" class="btn btn-success btn-flat btn-block" v-on:click="loader"><strong>CONFIRMAR</strong></button>
+                                                                            </div>
+                                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                                <button type="button" class="btn btn-danger btn-flat btn-block" data-dismiss="modal"><strong>CANCELAR</strong></button>
+                                                                            </div>
+                                                                          </div>
+                                                                        </div>
+                                                                      </div>
+                                                                    </form>
+                                                                  </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                   @endif
                                               @endforeach
                                           @endif
                                       </div>
                                   </li>
                                   @if(count($evaluaciones_comite))
+                                    <li class="time-label">
+                                        <span class="bg-green">
+                                            {{ date('d/m/Y', strtotime($proyecto[0]->created_at)) }}
+                                        </span>
+                                    </li>
                                       <li>
                                           <i class="fa fa-envelope bg-blue"></i>
                                           <div class="timeline-item">
@@ -266,7 +468,97 @@
                                               <h3 class="timeline-header">
                                                   <a href="#">EVALUACIONES - COMITE</a></h3>
                                               <div class="timeline-body">
-                                                  @include('back_office.pages.menu.proyectos.show.table_evaluaciones_comite')
+                                                @if(count($evaluaciones_comite))
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-condensed table-hover">
+                                                                    <thead style="background-color: #A9D0F5;">
+                                                                        <th>#</th>
+                                                                        <th>PROFESOR</th>
+                                                                        <th>VEREDICTO</th>
+                                                                        <th>OBSERVACIONES</th>
+                                                                        <th>ESTADO</th>
+                                                                        <th>FECHA - HORA</th>
+                                                                        <th width="120" class="text-center">OPCIONES</th>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach($evaluaciones_comite as $index => $evaluacion)
+                                                                            <tr>
+                                                                                <td>{{ $index + 1 }}</td>
+                                                                                <td>{{ $evaluacion->nombre }} {{ $evaluacion->apellido }}</td>
+                                                                                <td>
+                                                                                    @if($evaluacion->veredicto == 'aprobar' && $evaluacion->observaciones == '')
+                                                                                        <span class="label label-success">APROBADO</span>
+                                                                                    @elseif($evaluacion->veredicto == 'aprobar' && $evaluacion->observaciones != '')
+                                                                                        <span class="label label-warning">APROBADO CON OBSERVACIONES</span>
+                                                                                    @elseif($evaluacion->veredicto == 'rechazado')
+                                                                                        <span class="label label-danger">NO APROBADO</span>
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td>
+                                                                                  @if($evaluacion->observaciones == '')
+                                                                                    No se hicieron observaciones
+                                                                                  @else
+                                                                                    {{ $evaluacion->observaciones }}
+                                                                                  @endif
+                                                                                </td>
+                                                                                <td>{{ $evaluacion->estado }}</td>
+                                                                                <td>{{ date('d/m/Y - h:m', strtotime($evaluacion->created_at)) }}</td>
+                                                                                <td>
+                                                                                    <div class="col-sm-4 col-xs-12">
+                                                                                        <a class="btn btn-link btn-flat btn-md" href="" target="_blank" data-placement="top" title="DETALLES"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                                                                    </div>
+                                                                                    @if(count($comite))
+                                                                                        @foreach($comite as $com)
+                                                                                            @if(Auth::user()->user_id == $com->user_id)
+                                                                                                <div class="col-sm-4 col-xs-12">
+                                                                                                    <a style="color: #D68A10;" class="btn btn-link btn-flat btn-md" href="@if(count($evaluaciones_comite) < 3) {{ URL::action('ProyectosEvaluacionesComiteController@create', [$proyecto[0]->proyecto_id, 1]) }} @endif"  data-placement="top" title="EDITAR" @if(count($evaluaciones_comite) < 3) disable @endif><span class="glyphicon glyphicon-edit"></span></a>
+                                                                                                </div>
+                                                                                            @endif
+                                                                                        @endforeach
+                                                                                    @endif
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                              </div>
+                                              <div class="timeline-footer">
+                                                <hr style="margin:0 0 10px 0;">
+                                                  <div class="row">
+                                                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
+                                                          <button class="btn btn-app bg-green" data-target="#modal-validation-3" data-toggle="modal" @if($estado->nombre == 'aprobado_evaluacion_comite' || $estado->nombre == 'aprobado_observaciones_evaluacion_comite') disabled @endif> <i class="fa fa-check-square-o"></i> Validar</button>
+                                                            <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-validation-3">
+                                                              <form action="{{route('proyectos.aprobar', $proyecto[0]->proyecto_id)}}" method="post" autocomplete="off">
+                                                                @csrf
+
+                                                                <div class="modal-dialog">
+                                                                  <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">×</span>
+                                                                      </button>
+                                                                      <h4 class="modal-title text-left"><strong>APROBACION DE COMITE</strong></h4>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                          <button type="submit" class="btn btn-success btn-flat btn-block" v-on:click="loader"><strong>CONFIRMAR</strong></button>
+                                                                      </div>
+                                                                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                          <button type="button" class="btn btn-danger btn-flat btn-block" data-dismiss="modal"><strong>CANCELAR</strong></button>
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                              </form>
+                                                            </div>
+                                                      </div>
+                                                  </div>
                                               </div>
                                           </div>
                                       </li>
@@ -304,13 +596,95 @@
                                       <i class="fa fa-user bg-aqua"></i>
                                       <div class="timeline-item">
                                           <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
-                                          <h3 class="timeline-header no-border"><strong>ACTA DE APROBACION - COMITE</strong></h3>
+                                          <h3 class="timeline-header no-border"><strong>ACTA DE APROBACION DEL DECANO</strong></h3>
                                           <div class="timeline-footer">
-                                              <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@acta_aprobacion_comite', $proyecto[0]->proyecto_id) }}" target="_blank" v-on:click="loader">
+                                              <a class="btn btn-app bg-blue" href="" target="_blank" v-on:click="loader">
                                                   <i class="fa fa-cloud-download"></i> Descargar
                                               </a>
                                           </div>
                                       </div>
+                                  </li>
+                                @endif
+                                @if($estado->nombre == 'pendiente_tomo2')
+                                  <li>
+                                      <i class="fa fa-user bg-aqua"></i>
+                                      <div class="timeline-item">
+                                          <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
+                                          <h3 class="timeline-header no-border"><strong> PENDIENTE POR SUBIDA DE TOMO - II</strong></h3>
+                                          {{-- @can('validation_fact_1') --}}
+                                              <div class="timeline-footer">
+                                                  <div class="row">
+                                                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                              <form action="{{route('proyectos.tomo2', $proyecto[0]->proyecto_id)}}" method="post" autocomplete="off" enctype="multipart/form-data">
+                                                                @csrf
+                                                                <div class="row">
+                                                                  <div class="col-xs-12">
+                                                                    <small style="color: red;" class="" style="margin: 0 0 10px 0">*<b><u>NOTA</u></b>: Por favor, verifique que su titulo y objetivos sean iguales al Anexo y al Tomo I. <br> De lo contrario, tendrá altas posibilidades de ser rechazado su tomo, tome precauciones antes de subir el archivo.</small>
+                                                                    <hr style="margin:10px 0 10px 0;">
+
+                                                                    <div class="form-group{{ $errors->has('documento') ? ' has-warning' : '' }}">
+
+                                                                      <label for="file-upload2" class="btn btn-app bg-blue">
+                                                                        <i class="fa fa-upload"></i>Subir archivo
+                                                                      </label>
+                                                                      <input id="file-upload2" onchange='cambiar2()' type="file" style='display: none;' name='documento2' accept="application/pdf"/>
+                                                                      <span id="info2"></span>
+                                                                      {{-- <input type="file" name="documento"  accept="application/pdf" class="file-input"> --}}
+
+
+                                                                      @if ($errors->has('documento'))
+                                                                        <span class="help-block">
+                                                                          <strong>{{ $errors->first('documento') }}</strong>
+                                                                        </span>
+                                                                      @endif
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                                <div class="row">
+
+                                                                  <hr style="margin:0 0 10px 0;">
+                                                                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
+
+                                                                      <button class="btn btn-app bg-green" type="button" data-target="#modal-validation3" data-toggle="modal" @if($proyecto[0]->tomo2_estado == 'pendiente') disabled @endif>
+                                                                          <i class="fa fa-save"></i> Guardar
+                                                                      </button>
+                                                                      <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-validation3">
+                                                                          <div class="modal-dialog">
+                                                                              <div class="modal-content">
+                                                                                  <div class="modal-header">
+                                                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                          <span aria-hidden="true">×</span>
+                                                                                      </button>
+                                                                                  </div>
+                                                                                  <div class="modal-body">
+                                                                                      <div class="row">
+                                                                                          <div class="col-xs-12 text-center">
+                                                                                              <h4><strong>¿SEGURO QUE DESEA GUARDAR?</strong></h4>
+                                                                                          </div>
+                                                                                      </div>
+                                                                                  </div>
+                                                                                  <div class="modal-footer">
+
+                                                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                                        <button type="submit" class="btn btn-success btn-flat btn-block" v-on:click="loader"><strong>CONFIRMAR</strong></button>
+                                                                                    </div>
+                                                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                                        <button type="button" class="btn btn-danger btn-flat btn-block" data-dismiss="modal"><strong>CANCELAR</strong></button>
+                                                                                    </div>
+
+                                                                                  </div>
+                                                                              </div>
+                                                                          </div>
+                                                                      </div>
+                                                                  </div>
+
+                                                                </div>
+                                                            	</form>
+                                                            </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          {{-- @endcan --}}
                                   </li>
                               @endif
                           @elseif($proyecto[0]->fact_1_estado == 'rechazada')
@@ -400,17 +774,89 @@
                               </li>
                           @endif
                           @if($estado->nombre == 'pendiente_asignacion_jurado')
+                            <li class="time-label">
+                                <span class="bg-green">
+                                    {{ date('d/m/Y', strtotime($estado->created_at)) }}
+                                </span>
+                            </li>
+                            <li>
+                                <i class="fa fa-file-pdf-o bg-blue"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
+                                    <h3 class="timeline-header">
+                                        <strong>
+                                            DETALLES DEL
+                                            @if($proyecto[0]->tipo == 'trabajo_grado')
+                                                TRABAJO DE GRADO
+                                            @elseif($proyecto[0]->tipo == 'pasantia')
+                                                PASANTIA
+                                            @elseif($proyecto[0]->tipo == 'extraordinario')
+                                                SEMESTRE EXTRAORDINARIO
+                                            @endif - TOMO 1
+                                        </strong>
+                                    </h3>
+                                    <div class="timeline-body">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-xs-12">
+                                                <h5><strong>AUTOR:</strong> {{ strtoupper($proyecto[0]->nombres_autor) }} {{ strtoupper($proyecto[0]->apellidos_autor) }}</h5>
+                                                <h5><strong>COAUTOR:</strong> {{ strtoupper($proyecto[0]->nombres_coautor) }} {{ strtoupper($proyecto[0]->apellidos_coautor) }}</h5>
+                                                <h5><strong>PROGRAMA:</strong> {{ strtoupper($proyecto[0]->carrera) }}</h5>
+                                                <h5><strong>TIPO DE PROYECTO:</strong>
+                                                    @if($proyecto[0]->tipo == 'trabajo_grado')
+                                                        TRABAJO DE GRADO
+                                                    @elseif($proyecto[0]->tipo == 'pasantia')
+                                                        PASANTIA
+                                                    @elseif($proyecto[0]->tipo == 'extraordinario')
+                                                        SEMESTRE EXTRAORDINARIO
+                                                    @endif
+                                                </h5>
+                                                <h5><strong>TUTOR:</strong> {{ strtoupper($proyecto[0]->nombres_tutor) }} {{ strtoupper($proyecto[0]->apellidos_tutor) }}</h5>
+                                            </div>
+                                            <div class="col-sm-6 col-xs-12">
+                                                <div class="col-sm-offset-6 col-sm-6 col-xs-12 text-right">
+                                                    <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@document3', $proyecto[0]->tomo2) }}" target="_blank" v-on:click="loader">
+                                                        <i class="fa fa-cloud-download"></i> Documento
+                                                    </a>
+                                                    {{-- @can('edit_proyectos') --}}
+                                                        <a class="btn btn-app bg-yellow" href="" v-on:click="loader">
+                                                            <i class="fa fa-edit"></i> Editar
+                                                        </a>
+                                                    {{-- @endcan --}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <hr style="margin:0 0 10px 0;">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <h5><strong>TITULO:</strong></h5>
+                                                <h5>{{ $proyecto[0]->titulo }}</h5>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <hr style="margin:0 0 10px 0;">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <h5><strong>RESUMEN:</strong></h5>
+                                                <h5>{{ $proyecto[0]->resumen }}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
                               @if($asignacion_jurado  == 0)
                                   <li>
                                       <i class="fa fa-envelope bg-blue"></i>
                                       <div class="timeline-item">
                                           <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
-                                          <h3 class="timeline-header"><strong>PENDIENTE DE ASIGNACION DE JURADO</strong></h3>
-                                          @if(Auth::user()->user_id == $proyecto[0]->coordinador_user_id)
+                                          <h3 class="timeline-header"><strong>PENDIENTE POR ASIGNACION DE JURADO</strong></h3>
+                                          @if(Auth::user()->id == $proyecto[0]->coordinador_user_id)
                                               <div class="timeline-body">
                                                   <div class="row">
                                                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                          <a class="btn btn-app bg-green" href="{{ URL::action('ProyectosJuradosController@create', $proyecto[0]->proyecto_id) }}" v-on:click="loader">
+                                                          <a class="btn btn-app bg-green" href="{{ route('jurados.create', $proyecto[0]->proyecto_id) }}" v-on:click="loader">
                                                               <i class="fa fa-plus"></i> Nuevo
                                                           </a>
                                                       </div>
@@ -428,7 +874,7 @@
                                       <i class="fa fa-envelope bg-blue"></i>
                                       <div class="timeline-item">
                                           <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
-                                          <h3 class="timeline-header"><strong>PENDIENTE DE REVISION DE JURADO</strong></h3>
+                                          <h3 class="timeline-header"><strong>PENDIENTE POR REVISION DE JURADO</strong></h3>
                                           <div class="timeline-body">
                                               @include('back_office.pages.menu.proyectos.show.table_jurado')
                                           </div>
@@ -496,20 +942,57 @@
                                       <h3 class="timeline-header"><strong>PENDIENTE POR EVALUACION DE JURADO</strong></h3>
                                       @if(count($jurado))
                                           @foreach($jurado as $jurado)
-                                              @if($jurado->estado == 'aprobado')
-                                                  @if(Auth::user()->user_id == $jurado->presidente || $proyecto[0]->coordinador_user_id == Auth::user()->user_id)
+                                              {{-- @if($jurado->estado == 'aprobado') --}}
+                                                  @if(Auth::user()->id == $jurado->presidente || $proyecto[0]->coordinador_user_id == Auth::user()->id)
                                                       <div class="timeline-body">
                                                           <div class="row">
                                                               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                   <a class="btn btn-app bg-green" data-target="#modal-evaluacion-jurado" data-toggle="modal">
                                                                       <i class="fa  fa-check-square-o"></i> Evaluar
                                                                   </a>
-                                                                  @include('back_office.pages.menu.proyectos.show.modal_evaluacion_jurado')
+                                                                  <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-evaluacion-jurado">
+                                                                  	<form class="" action="{{ route('proyectos.veredicto', $proyecto[0]->proyecto_id) }}" method="post">
+                                                                      @csrf
+                                                                  		<div class="modal-dialog">
+                                                                  			<div class="modal-content">
+                                                                  				<div class="modal-header">
+                                                                  					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                  						<span aria-hidden="true">×</span>
+                                                                  					</button>
+                                                                  					<h4 class="modal-title"><strong>VEREDICTO FINAL</strong></h4>
+                                                                  				</div>
+                                                                  				<div class="modal-body">
+                                                                  					<div class="row">
+                                                                  						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                  							<div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
+                                                                  								<label>VEREDICTO</label>
+                                                                  								<select style="width: 100%;" class="form-control select2" name="veredicto">
+                                                                  									<option value="">Seleccionar</option>
+                                                                  									<option value="aprobado">APROBAR</option>
+                                                                  									<option value="aprobado_observaciones">APROBAR CON OBSERVACIONES</option>
+                                                                  									<option value="rechazado">RECHAZAR</option>
+                                                                  								</select>
+                                                                  							</div>
+                                                                  						</div>
+                                                                  					</div>
+                                                                  				</div>
+                                                                  				<div class="modal-footer">
+                                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                                <button type="submit" class="btn btn-success btn-flat btn-block" v-on:click="loader"><strong>CONFIRMAR</strong></button>
+                                                                            </div>
+                                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                                <button type="button" class="btn btn-danger btn-flat btn-block" data-dismiss="modal"><strong>CANCELAR</strong></button>
+                                                                            </div>
+                                                                  				</div>
+                                                                  			</div>
+                                                                  		</div>
+                                                                  	</form>
+                                                                  </div>
                                                               </div>
                                                           </div>
                                                       </div>
                                                   @endif
-                                              @endif
+                                              {{-- @endif --}}
                                           @endforeach
                                       @endif
                                   </div>
@@ -573,7 +1056,7 @@
                                       <div class="timeline-body">
                                           <div class="row">
                                               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                  <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@acta_veredicto', [$proyecto[0]->proyecto_id]) }}" target="_blank" v-on:click="loader">
+                                                  <a class="btn btn-app bg-blue" href="" target="_blank" v-on:click="loader">
                                                       <i class="fa fa-cloud-download"></i> Descargar
                                                   </a>
                                               </div>
@@ -581,7 +1064,7 @@
                                       </div>
                                   </div>
                               </li>
-                              <li>
+                              {{-- <li>
                                   <i class="fa fa-user bg-aqua"></i>
                                   <div class="timeline-item">
                                       <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
@@ -589,14 +1072,14 @@
                                       <div class="timeline-body">
                                           <div class="row">
                                               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                  <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@acta_biblioteca_virtual', [$proyecto[0]->proyecto_id]) }}" target="_blank" v-on:click="loader">
+                                                  <a class="btn btn-app bg-blue" href="" target="_blank" v-on:click="loader">
                                                       <i class="fa fa-cloud-download"></i> Descargar
                                                   </a>
                                               </div>
                                           </div>
                                       </div>
                                   </div>
-                              </li>
+                              </li> --}}
                               <li class="time-label">
                                   <span class="bg-red">
                                       {{ date('d/m/Y', strtotime($estado->created_at)) }}
@@ -609,7 +1092,7 @@
           </div>
       </section>
   </div>
-  @push ('scripts')
-      {{-- @include('back_office.pages.menu.proyectos.common.scripts') --}}
-  @endpush
+  {{-- @push ('scripts')
+      @include('back_office.pages.menu.proyectos.common.scripts')
+  @endpush --}}
 @endsection
