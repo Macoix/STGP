@@ -12,6 +12,8 @@ use App\ProyectoEstado;
 use App\Comite;
 use App\ProyectoJurados;
 use App\ProyectoEvaluacionesComite;
+use App\Jurado;
+use App\HTutotes;
 use Illuminate\Http\Request;
 use Auth;
 use Storage;
@@ -25,12 +27,22 @@ class ProyectosController extends Controller
      */
     public function index()
     {
-      $users = User::All();
+      $users = User::where([
+        ['user_id',Auth::user()->id],
+        ['second_user_id',Auth::user()->id]
+      ]);
       $proyectos = Proyectos::where('user_id',Auth::user()->id)
       ->orWhere('second_user_id',Auth::user()->id)
       ->get();
-
-      return view('vendor.adminlte.proyectos.index', compact('proyectos','users'));
+      $carreras = Carrera::where('estado', '!=', 'inactivo')
+      ->get();
+      $user = User::where([
+        ['rol_id','3'],
+        ['estado','!=','inactivo'],
+        ['estado','!=','eliminado'],
+      ])->get();
+      $tutores = Tutores::All();
+      return view('vendor.adminlte.proyectos.index', compact('proyectos','users','carreras', 'user', 'tutores'));
     }
 
     /**
@@ -69,7 +81,9 @@ class ProyectosController extends Controller
       $proyectos = Proyectos::where([
         ['carrera_id', $request['carrera']],
         ['periodo_id', $periodo->id],
+        ['tipo', $request['tipo']],
       ])->get();
+
 
       if ($proyectos->count() == 0) {
 
@@ -126,11 +140,18 @@ class ProyectosController extends Controller
       $proyecto->proyecto_estado_id = $proyecto_estado->proyecto_estado_id;
       $proyecto->save();
 
+      $tutor = new HTutotes;
+      $tutor->user_id = $request['tutor'];
+      $tutor->proyecto_id = $proyecto->proyecto_id;
+      $tutor->save();
+
       return redirect()->route('proyectos.show',$proyecto->proyecto_id);
     }
 
     function details($id)
     {
+
+
         $proyecto = Proyectos::join('carreras as carre', 'carre.id', '=', 'proyectos.carrera_id')
             // ->join('proyectos_estados', 'proyectos_estados.proyecto_estado_id', '=', 'proyectos.proyecto_estado_id')
             ->join('users as autor', 'autor.id', '=', 'proyectos.user_id')
@@ -146,6 +167,12 @@ class ProyectosController extends Controller
             ->where('proyecto_id','=', $id)
             ->get();
 
+        $ultimo_estado = ProyectoEstado::join('users', 'users.id', '=', 'proyectos_estados.user_id')
+            ->select('proyectos_estados.nombre', 'comentario', 'proyectos_estados.created_at', 'users.nombre as usuario_nombre', 'users.apellido as usuario_apellido')
+            ->orderBy('proyecto_estado_id','desc')
+            ->where('proyecto_id','=', $id)
+            ->first();
+
         $comite = Comite::join('users', 'users.id', '=', 'comites.user_id')
             ->where('carrera_id', $proyecto[0]->carrera_id)
             ->get();
@@ -158,11 +185,11 @@ class ProyectosController extends Controller
         $jurados = ProyectoJurados::join('users as  presidente', 'presidente.id', '=', 'proyecto_jurados.presidente_user_id')
             ->join('users as miembro1', 'miembro1.id', '=', 'proyecto_jurados.miembro1_user_id')
             ->join('users as miembro2', 'miembro2.id', '=', 'proyecto_jurados.miembro2_user_id')
-            ->select('proyecto_jurado_id','presidente.id as presidente', 'presidente.nombre as nombres_presidente', 'presidente.apellido as apellidos_presidente', 'miembro1.nombre as nombres_miembro1', 'miembro1.apellido as apellidos_miembro1', 'miembro2.nombre as nombres_miembro2', 'miembro2.apellido as apellidos_miembro2')
+            ->select('proyecto_jurado_id','presidente.id as presidente_id', 'presidente.nombre as nombres_presidente', 'presidente.apellido as apellidos_presidente', 'miembro1.nombre as nombres_miembro1', 'miembro1.apellido as apellidos_miembro1', 'miembro2.nombre as nombres_miembro2', 'miembro2.apellido as apellidos_miembro2', 'proyecto_jurados.created_at as created_at')
             ->where('proyecto_id', $id)
             ->get();
 
-        return compact('proyecto', 'estados', 'comite', 'evaluaciones_comite', 'jurados');
+        return compact('proyecto', 'estados', 'comite', 'evaluaciones_comite', 'jurados', 'ultimo_estado');
         // , '
     }
     public function show($id)
@@ -173,13 +200,23 @@ class ProyectosController extends Controller
 
       $estados = $detalles['estados'];
 
+      $ultimo_estado = $detalles['ultimo_estado'];
+        
       $comite = $detalles['comite'];
 
       $evaluaciones_comite = $detalles['evaluaciones_comite'];
-      // dd($evaluaciones_comite);
-      $jurado = $detalles['jurados'];
 
-      return view('vendor.adminlte.proyectos.show', compact('proyecto', 'estados', 'comite', 'evaluaciones_comite', 'jurado'));
+      $jurados = $detalles['jurados'];
+      // dd($jurados);
+      $carreras = Carrera::where('estado', '!=', 'inactivo')
+      ->get();
+
+      $tutores = Tutores::All();
+
+      $juradoss = Jurado::join('users', 'users.id', '=', 'jurados.user_id')
+          ->where('carrera_id', $proyecto[0]->carrera_id)
+          ->get();
+      return view('vendor.adminlte.proyectos.show', compact('proyecto', 'estados','ultimo_estado', 'comite', 'evaluaciones_comite', 'jurados', 'carreras', 'tutores', 'juradoss'));
     }
 
     /**
@@ -255,7 +292,7 @@ class ProyectosController extends Controller
 
     public function document($document)
     {
-        return Storage::response("proyectos/documentos/$document");
+        return Storage::response("proyectos/anexos/$document");
     }
     public function document2($document)
     {
@@ -264,6 +301,10 @@ class ProyectosController extends Controller
     public function document3($document)
     {
         return Storage::response("proyectos/tomos2/$document");
+    }
+    public function manual()
+    {
+        return Storage::response("proyectos/manual/Normas de Trabajo de Grado.pdf");
     }
 
     public function validacion_anexo(Request $request, $id)
@@ -401,6 +442,17 @@ class ProyectosController extends Controller
         $proyecto->proyecto_estado_id = $proyecto_estado->proyecto_estado_id;
         $proyecto->save();
 
-        return redirect()->to('tablero/menu/proyectos/'.$id)->with($notification);
+        $tutor = HTutotes::where('proyecto_id',$id)
+        ->first();
+        if($proyecto->tipo=='trabajo_grado'){
+          $tutor->horas = 34;
+        }else if($proyecto->tipo=='pasantia'){
+          $tutor->horas = 33;
+        }else{
+          $tutor->horas = 34;
+        }
+        $tutor->save();
+
+        return redirect()->route('proyectos.show',$id);
     }
 }

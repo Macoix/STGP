@@ -17,6 +17,8 @@ class Tutores extends Migration
         $table->increments('id');
         $table->integer('carrera_id');
         $table->integer('user_id');
+        $table->string('escalafon')->nullable();
+        $table->string('condicion')->nullable();
         $table->timestamps();
       });
     }

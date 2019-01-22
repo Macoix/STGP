@@ -15,9 +15,11 @@ class PeriodosController extends Controller
      */
     public function index()
     {
-      $periodos = Periodos::where('estado','!=','concluido')
+      // $periodos = Periodos::where('estado','!=','concluido')
+      // ->get();
+      $periodos = Periodos::orderBy('id','desc')
       ->get();
-
+      // dd($periodos);
       return view('vendor.adminlte.periodos.index', compact('periodos'));
     }
 
@@ -92,7 +94,15 @@ class PeriodosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $periodo = Periodos::where('id', $id)
+      ->first();
+      $periodo->facultad = $request['facultades'];
+      $periodo->ano = $request['ano'];
+      $periodo->periodo = $request['periodo'];
+      $periodo->estado = $request['estado'];
+      $periodo->save();
+
+      return redirect()->route('periodos.index');
     }
 
     /**

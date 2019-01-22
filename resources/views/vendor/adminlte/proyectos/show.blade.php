@@ -1,6 +1,7 @@
 @extends('adminlte::layouts.app')
 @section('title','Timeline de projecto')
 @section('main-content')
+  @include('vendor.adminlte.layouts.partials.bar')
   @section('contentheader_title', 'PROYECTOS')
   <div class="">
       {{-- @include('back_office.pages.menu.proyectos.common.header') --}}
@@ -9,13 +10,13 @@
           @if(Session::get('alert_type') == 'warning')
               <div class="alert alert-warning alert-dismissible">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                  <h4><i class="icon fa fa-check"></i> ¡Exito!</h4>
+                  <h4><i class="icon fa fa-check"></i> ¡Éxito!</h4>
                   {{ Session::get('message') }}
               </div>
           @endif
           <div class="row">
               <div class="col-sm-6 col-xs-12">
-                  <a class="btn btn-app bg-red" href="{{ route('proyectos.index') }}" v-on:click="loader">
+                  <a class="btn btn-app bg-red" href="{{ route('proyectos.index') }}">
                       <i class="fa fa-reply"></i> Volver
                   </a>
               </div>
@@ -41,7 +42,7 @@
                                       @if($proyecto[0]->tipo == 'trabajo_grado')
                                           TRABAJO DE GRADO
                                       @elseif($proyecto[0]->tipo == 'pasantia')
-                                          PASANTIA
+                                          PASANTÍA
                                       @elseif($proyecto[0]->tipo == 'extraordinario')
                                           SEMESTRE EXTRAORDINARIO
                                       @endif - ANEXO D
@@ -57,7 +58,7 @@
                                               @if($proyecto[0]->tipo == 'trabajo_grado')
                                                   TRABAJO DE GRADO
                                               @elseif($proyecto[0]->tipo == 'pasantia')
-                                                  PASANTIA
+                                                  PASANTÍA
                                               @elseif($proyecto[0]->tipo == 'extraordinario')
                                                   SEMESTRE EXTRAORDINARIO
                                               @endif
@@ -67,13 +68,12 @@
                                       </div>
                                       <div class="col-sm-6 col-xs-12">
                                           <div class="col-sm-offset-6 col-sm-6 col-xs-12 text-right">
-                                              <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@document', $proyecto[0]->anexo) }}" target="_blank" v-on:click="loader">
+                                              <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@document', $proyecto[0]->anexo) }}" target="_blank" >
                                                   <i class="fa fa-cloud-download"></i> Documento
                                               </a>
                                               {{-- @can('edit_proyectos') --}}
-                                                  <a class="btn btn-app bg-yellow" href="{{route('proyectos.edit', $proyecto[0]->proyecto_id)}}" v-on:click="loader">
-                                                      <i class="fa fa-edit"></i> Editar
-                                                  </a>
+                                                  <button class="btn btn-app bg-yellow" data-target="#modal-proyecto-{{ $proyecto[0]->proyecto_id }}" data-toggle="modal" data-placement="top" title="Editar"><i class="fa fa-edit"></i>Editar</button>
+                                                  @include('vendor.adminlte.proyectos.modal')
                                               {{-- @endcan --}}
                                           </div>
                                       </div>
@@ -83,7 +83,7 @@
                                   </div>
                                   <div class="row">
                                       <div class="col-xs-12">
-                                          <h5><strong>TITULO:</strong></h5>
+                                          <h5><strong>TÍTULO:</strong></h5>
                                           <h5>{{ $proyecto[0]->titulo }}</h5>
                                       </div>
                                   </div>
@@ -103,7 +103,7 @@
                           <i class="fa fa-user bg-aqua"></i>
                           <div class="timeline-item">
                               <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($proyecto[0]->created_at)) }}</span>
-                              <h3 class="timeline-header no-border"><strong> PENDIENTE POR APROBACION DE ANEXO</strong></h3>
+                              <h3 class="timeline-header no-border"><strong> PENDIENTE POR APROBACIÓN DE ANEXO</strong></h3>
                               {{-- @can('validation_fact_1') --}}
                                   <div class="timeline-footer">
                                       <div class="row">
@@ -119,7 +119,7 @@
                                                 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 						<span aria-hidden="true">×</span>
                                                 					</button>
-                                                					<h4 class="modal-title"><strong>APROBACION DE ANEXO</strong></h4>
+                                                					<h4 class="modal-title"><strong>APROBACIÓN DE ANEXO</strong></h4>
                                                 				</div>
                                                 				<div class="modal-body">
                                                 					<div class="row">
@@ -139,7 +139,7 @@
                                                 				</div>
                                                 				<div class="modal-footer">
                                                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                              <button type="submit" class="btn btn-success btn-flat btn-block" v-on:click="loader"><strong>CONFIRMAR</strong></button>
+                                                              <button type="submit" class="btn btn-success btn-flat btn-block" ><strong>CONFIRMAR</strong></button>
                                                           </div>
                                                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                               <button type="button" class="btn btn-danger btn-flat btn-block" data-dismiss="modal"><strong>CANCELAR</strong></button>
@@ -174,7 +174,7 @@
                                           @if($proyecto[0]->tipo == 'trabajo_grado')
                                               TRABAJO DE GRADO
                                           @elseif($proyecto[0]->tipo == 'Pasantia')
-                                              Pasantia
+                                              Pasantía
                                           @elseif($proyecto[0]->tipo == 'Extraordinario')
                                               Semestre Extraordinario
                                           @endif
@@ -194,7 +194,7 @@
                                       <i class="fa fa-user bg-aqua"></i>
                                       <div class="timeline-item">
                                           <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
-                                          <h3 class="timeline-header"><strong>ANEXO RECHAZADA</strong></h3>
+                                          <h3 class="timeline-header"><strong>ANEXO RECHAZADO</strong></h3>
                                           <div class="timeline-body">
                                               <span style="color: red;">POR FAVOR VERIFIQUE SU ANEXO.</span><br><br>
                                               <label>OBSERVACIONES:</label>
@@ -236,11 +236,11 @@
 
                                                                     <div class="form-group{{ $errors->has('documento') ? ' has-warning' : '' }}">
 
-                                                                      <label for="file-upload" class="btn btn-app bg-blue">
+                                                                      <label for="file-upload3" class="btn btn-app bg-blue">
                                                                         <i class="fa fa-upload"></i>Subir archivo
                                                                       </label>
-                                                                      <input id="file-upload" onchange='cambiar()' type="file" style='display: none;' name='documento' accept="application/pdf"/>
-                                                                      <span id="info"></span>
+                                                                      <input id="file-upload3" onchange='cambiar3()' type="file" style='display:none;' name='documento' accept="application/pdf"/>
+                                                                      <span id="info3"></span>
                                                                       {{-- <input type="file" name="documento"  accept="application/pdf" class="file-input"> --}}
 
 
@@ -257,10 +257,10 @@
                                                                   <hr style="margin:0 0 10px 0;">
                                                                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
 
-                                                                      <button class="btn btn-app bg-green" type="button" data-target="#modal-validation" data-toggle="modal" @if($proyecto[0]->tomo_estado == 'pendiente') disabled @endif>
+                                                                      <button class="btn btn-app bg-green" type="button" data-target="#modal-validation-{{$proyecto[0]->proyecto_id}}" data-toggle="modal" @if($proyecto[0]->tomo_estado == 'pendiente') disabled @endif>
                                                                           <i class="fa fa-save"></i> Guardar
                                                                       </button>
-                                                                      <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-validation">
+                                                                      <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-validation-{{$proyecto[0]->proyecto_id}}">
                                                                           <div class="modal-dialog">
                                                                               <div class="modal-content">
                                                                                   <div class="modal-header">
@@ -278,7 +278,7 @@
                                                                                   <div class="modal-footer">
 
                                                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                                                        <button type="submit" class="btn btn-success btn-flat btn-block" v-on:click="loader"><strong>CONFIRMAR</strong></button>
+                                                                                        <button type="submit" class="btn btn-success btn-flat btn-block" ><strong>CONFIRMAR</strong></button>
                                                                                     </div>
                                                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                                                         <button type="button" class="btn btn-danger btn-flat btn-block" data-dismiss="modal"><strong>CANCELAR</strong></button>
@@ -315,7 +315,7 @@
                                                 @if($proyecto[0]->tipo == 'trabajo_grado')
                                                     TRABAJO DE GRADO
                                                 @elseif($proyecto[0]->tipo == 'pasantia')
-                                                    PASANTIA
+                                                    PASANTÍA
                                                 @elseif($proyecto[0]->tipo == 'extraordinario')
                                                     SEMESTRE EXTRAORDINARIO
                                                 @endif - TOMO 1
@@ -331,7 +331,7 @@
                                                         @if($proyecto[0]->tipo == 'trabajo_grado')
                                                             TRABAJO DE GRADO
                                                         @elseif($proyecto[0]->tipo == 'pasantia')
-                                                            PASANTIA
+                                                            PASANTÍA
                                                         @elseif($proyecto[0]->tipo == 'extraordinario')
                                                             SEMESTRE EXTRAORDINARIO
                                                         @endif
@@ -340,11 +340,11 @@
                                                 </div>
                                                 <div class="col-sm-6 col-xs-12">
                                                     <div class="col-sm-offset-6 col-sm-6 col-xs-12 text-right">
-                                                        <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@document2', $proyecto[0]->tomo) }}" target="_blank" v-on:click="loader">
+                                                        <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@document2', $proyecto[0]->tomo) }}" target="_blank" >
                                                             <i class="fa fa-cloud-download"></i> Documento
                                                         </a>
                                                         {{-- @can('edit_proyectos') --}}
-                                                            <a class="btn btn-app bg-yellow" href="" v-on:click="loader">
+                                                            <a class="btn btn-app bg-yellow" href="" >
                                                                 <i class="fa fa-edit"></i> Editar
                                                             </a>
                                                         {{-- @endcan --}}
@@ -356,7 +356,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-12">
-                                                    <h5><strong>TITULO:</strong></h5>
+                                                    <h5><strong>TÍTULO:</strong></h5>
                                                     <h5>{{ $proyecto[0]->titulo }}</h5>
                                                 </div>
                                             </div>
@@ -383,7 +383,7 @@
                                                       <div class="timeline-footer">
                                                           <div class="row">
                                                               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                  <a class="btn btn-app bg-blue" href="" target="_blank" v-on:click="loader">
+                                                                  <a class="btn btn-app bg-blue" href="" target="_blank" >
                                                                       <i class="fa fa-cloud-download"></i> Descargar
                                                                   </a>
                                                                   {{ URL::action('ProyectosController@acta_invitacion_comite', [$proyecto[0]->proyecto_id]) }}
@@ -399,7 +399,7 @@
                                       <i class="fa fa-user bg-aqua"></i>
                                       <div class="timeline-item">
                                           <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
-                                          <h3 class="timeline-header no-border"><strong>PENDIENTE POR EVALUACION DE COMITE</strong></h3>
+                                          <h3 class="timeline-header no-border"><strong>PENDIENTE POR EVALUACIÓN DE COMITÉ</strong></h3>
                                           @if(count($comite))
                                               @foreach($comite as $com)
                                                   @if(Auth::user()->id == $com->id)
@@ -417,7 +417,7 @@
                                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                               <span aria-hidden="true">×</span>
                                                                             </button>
-                                                                            <h4 class="modal-title"><strong>APROBACION DE COMITE</strong></h4>
+                                                                            <h4 class="modal-title"><strong>APROBACIÓN DE COMITE</strong></h4>
                                                                           </div>
                                                                           <div class="modal-body">
                                                                             <div class="row">
@@ -437,7 +437,7 @@
                                                                           </div>
                                                                           <div class="modal-footer">
                                                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                                                <button type="submit" class="btn btn-success btn-flat btn-block" v-on:click="loader"><strong>CONFIRMAR</strong></button>
+                                                                                <button type="submit" class="btn btn-success btn-flat btn-block" ><strong>CONFIRMAR</strong></button>
                                                                             </div>
                                                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                                                 <button type="button" class="btn btn-danger btn-flat btn-block" data-dismiss="modal"><strong>CANCELAR</strong></button>
@@ -466,7 +466,7 @@
                                           <div class="timeline-item">
                                               <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
                                               <h3 class="timeline-header">
-                                                  <a href="#">EVALUACIONES - COMITE</a></h3>
+                                                  <b>EVALUACIONES - COMITÉ</b></h3>
                                               <div class="timeline-body">
                                                 @if(count($evaluaciones_comite))
                                                     <div class="row">
@@ -480,7 +480,7 @@
                                                                         <th>OBSERVACIONES</th>
                                                                         <th>ESTADO</th>
                                                                         <th>FECHA - HORA</th>
-                                                                        <th width="120" class="text-center">OPCIONES</th>
+                                                                        {{-- <th width="120" class="text-center">OPCIONES</th> --}}
                                                                     </thead>
                                                                     <tbody>
                                                                         @foreach($evaluaciones_comite as $index => $evaluacion)
@@ -505,7 +505,7 @@
                                                                                 </td>
                                                                                 <td>{{ $evaluacion->estado }}</td>
                                                                                 <td>{{ date('d/m/Y - h:m', strtotime($evaluacion->created_at)) }}</td>
-                                                                                <td>
+                                                                                {{-- <td>
                                                                                     <div class="col-sm-4 col-xs-12">
                                                                                         <a class="btn btn-link btn-flat btn-md" href="" target="_blank" data-placement="top" title="DETALLES"><span class="glyphicon glyphicon-eye-open"></span></a>
                                                                                     </div>
@@ -518,7 +518,7 @@
                                                                                             @endif
                                                                                         @endforeach
                                                                                     @endif
-                                                                                </td>
+                                                                                </td> --}}
                                                                             </tr>
                                                                         @endforeach
                                                                     </tbody>
@@ -543,11 +543,11 @@
                                                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <span aria-hidden="true">×</span>
                                                                       </button>
-                                                                      <h4 class="modal-title text-left"><strong>APROBACION DE COMITE</strong></h4>
+                                                                      <h4 class="modal-title text-left"><strong>APROBACION DE COMITÉ</strong></h4>
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                                          <button type="submit" class="btn btn-success btn-flat btn-block" v-on:click="loader"><strong>CONFIRMAR</strong></button>
+                                                                          <button type="submit" class="btn btn-success btn-flat btn-block" ><strong>CONFIRMAR</strong></button>
                                                                       </div>
                                                                       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                                           <button type="button" class="btn btn-danger btn-flat btn-block" data-dismiss="modal"><strong>CANCELAR</strong></button>
@@ -583,11 +583,11 @@
                                                   PROYECTO
                                               @endif
                                               @if($estado->nombre == 'aprobado_evaluacion_comite')
-                                                  APROBADO POR COMITE
+                                                  APROBADO POR COMITÉ
                                               @elseif($estado->nombre == 'aprobado_observaciones_evaluacion_comite')
-                                                  APROBADO POR COMITE CON OBSERVACIONES
+                                                  APROBADO POR COMITÉ CON OBSERVACIONES
                                               @else
-                                                  NO APROBADO POR COMITE
+                                                  NO APROBADO POR COMITÉ
                                               @endif
                                           </strong></h3>
                                       </div>
@@ -596,9 +596,9 @@
                                       <i class="fa fa-user bg-aqua"></i>
                                       <div class="timeline-item">
                                           <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
-                                          <h3 class="timeline-header no-border"><strong>ACTA DE APROBACION DEL DECANO</strong></h3>
+                                          <h3 class="timeline-header no-border"><strong>ACTA DE APROBACIÓN DEL DECANO</strong></h3>
                                           <div class="timeline-footer">
-                                              <a class="btn btn-app bg-blue" href="" target="_blank" v-on:click="loader">
+                                              <a class="btn btn-app bg-blue" href="{{route('cartadecano',$proyecto[0]->proyecto_id)}}" target="_blank" >
                                                   <i class="fa fa-cloud-download"></i> Descargar
                                               </a>
                                           </div>
@@ -666,7 +666,7 @@
                                                                                   <div class="modal-footer">
 
                                                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                                                        <button type="submit" class="btn btn-success btn-flat btn-block" v-on:click="loader"><strong>CONFIRMAR</strong></button>
+                                                                                        <button type="submit" class="btn btn-success btn-flat btn-block" ><strong>CONFIRMAR</strong></button>
                                                                                     </div>
                                                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                                                         <button type="button" class="btn btn-danger btn-flat btn-block" data-dismiss="modal"><strong>CANCELAR</strong></button>
@@ -792,7 +792,7 @@
                                                 PASANTIA
                                             @elseif($proyecto[0]->tipo == 'extraordinario')
                                                 SEMESTRE EXTRAORDINARIO
-                                            @endif - TOMO 1
+                                            @endif - TOMO 2
                                         </strong>
                                     </h3>
                                     <div class="timeline-body">
@@ -805,7 +805,7 @@
                                                     @if($proyecto[0]->tipo == 'trabajo_grado')
                                                         TRABAJO DE GRADO
                                                     @elseif($proyecto[0]->tipo == 'pasantia')
-                                                        PASANTIA
+                                                        PASANTÍA
                                                     @elseif($proyecto[0]->tipo == 'extraordinario')
                                                         SEMESTRE EXTRAORDINARIO
                                                     @endif
@@ -814,11 +814,11 @@
                                             </div>
                                             <div class="col-sm-6 col-xs-12">
                                                 <div class="col-sm-offset-6 col-sm-6 col-xs-12 text-right">
-                                                    <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@document3', $proyecto[0]->tomo2) }}" target="_blank" v-on:click="loader">
+                                                    <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@document3', $proyecto[0]->tomo2) }}" target="_blank" >
                                                         <i class="fa fa-cloud-download"></i> Documento
                                                     </a>
                                                     {{-- @can('edit_proyectos') --}}
-                                                        <a class="btn btn-app bg-yellow" href="" v-on:click="loader">
+                                                        <a class="btn btn-app bg-yellow" href="" >
                                                             <i class="fa fa-edit"></i> Editar
                                                         </a>
                                                     {{-- @endcan --}}
@@ -830,7 +830,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-xs-12">
-                                                <h5><strong>TITULO:</strong></h5>
+                                                <h5><strong>TÍTULO:</strong></h5>
                                                 <h5>{{ $proyecto[0]->titulo }}</h5>
                                             </div>
                                         </div>
@@ -851,14 +851,13 @@
                                       <i class="fa fa-envelope bg-blue"></i>
                                       <div class="timeline-item">
                                           <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
-                                          <h3 class="timeline-header"><strong>PENDIENTE POR ASIGNACION DE JURADO</strong></h3>
+                                          <h3 class="timeline-header"><strong>PENDIENTE POR ASIGNACIÓN DE JURADO</strong></h3>
                                           @if(Auth::user()->id == $proyecto[0]->coordinador_user_id)
                                               <div class="timeline-body">
                                                   <div class="row">
                                                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                          <a class="btn btn-app bg-green" href="{{ route('jurados.create', $proyecto[0]->proyecto_id) }}" v-on:click="loader">
-                                                              <i class="fa fa-plus"></i> Nuevo
-                                                          </a>
+                                                          <button class="btnn btn btn-app bg-green" data-target="#modal-jurado-{{$proyecto[0]->proyecto_id}}" data-toggle="modal" data-placement="top" title="Nuevo"><span class="fa fa-plus"></span>Nuevo</button>
+                                                              @include('vendor.adminlte.proyectos.modaljurado')
                                                       </div>
                                                   </div>
                                               </div>
@@ -874,7 +873,7 @@
                                       <i class="fa fa-envelope bg-blue"></i>
                                       <div class="timeline-item">
                                           <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
-                                          <h3 class="timeline-header"><strong>PENDIENTE POR REVISION DE JURADO</strong></h3>
+                                          <h3 class="timeline-header"><strong>PENDIENTE POR REVISIÓN DE JURADO</strong></h3>
                                           <div class="timeline-body">
                                               @include('back_office.pages.menu.proyectos.show.table_jurado')
                                           </div>
@@ -900,26 +899,26 @@
                                   <i class="fa fa-user bg-aqua"></i>
                                   <div class="timeline-item">
                                       <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
-                                      <h3 class="timeline-header no-border"><strong>ACTA DE CONSTITUCION DE JURADO</strong></h3>
+                                      <h3 class="timeline-header no-border"><strong>ACTA DE CONSTITUCIÓN DE JURADO</strong></h3>
                                       <div class="timeline-footer">
-                                          <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@acta_constitucion_jurado', $proyecto[0]->proyecto_id) }}" target="_blank" v-on:click="loader">
+                                          <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@acta_constitucion_jurado', $proyecto[0]->proyecto_id) }}" target="_blank" >
                                               <i class="fa fa-cloud-download"></i> Descargar
                                           </a>
                                       </div>
                                   </div>
                               </li>
-                              <li>
+                              {{-- <li>
                                   <i class="fa fa-user bg-aqua"></i>
                                   <div class="timeline-item">
                                       <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
                                       <h3 class="timeline-header no-border"><strong>ACTA DE INVITACION DE JURADO</strong></h3>
                                       <div class="timeline-footer">
-                                          <a class="btn btn-app bg-blue" href="{{ URL::action('ProyectosController@acta_invitacion_jurado', $proyecto[0]->proyecto_id) }}" target="_blank" v-on:click="loader">
+                                          <a class="btn btn-app bg-blue" href="{{ route('invitacionJurado', $proyecto[0]->proyecto_id) }}" target="_blank" >
                                               <i class="fa fa-cloud-download"></i> Descargar
                                           </a>
                                       </div>
                                   </div>
-                              </li>
+                              </li> --}}
                           @elseif($estado->nombre == 'jurado_rechazado')
                               <li class="time-label">
                                   <span class="bg-green">
@@ -935,15 +934,78 @@
                               </li>
                           @endif
                           @if($estado->nombre == 'pendiente_evaluacion_jurado')
+                            <li>
+                                <i class="fa fa-user bg-aqua"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
+                                    <h3 class="timeline-header no-border"><strong>JURADO ASIGNADO</strong></h3>
+                                    <div class="timeline-body">
+                                      <div class="row">
+                                          <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                                              <div class="table-responsive">
+                                                  <table class="table table-condensed table-hover">
+                                                      <thead style="background-color: #A9D0F5;">
+                                                          <th>JURADOS</th>
+                                                          <th>FECHA</th>
+                                                          <th>HORA</th>
+                                                          <th>OPCIONES</th>
+                                                          {{-- @if($proyecto[0]->estado == 'pendiente_revision_jurado')
+                                                              @if(Auth::user()->user_id == $postgrado[0]->user_id)
+                                                                  <th width="60">OPCIONES</th>
+                                                              @endif
+                                                          @endif --}}
+                                                      </thead>
+                                                      <tbody>
+                                                          @foreach($jurados as $jurado)
+                                                              <tr>
+                                                                  <td>
+                                                                      <strong>Miembro 1: </strong>{{ $jurado->nombres_presidente }} {{ $jurado->apellidos_presidente }}<br>
+                                                                      <strong>Miembro 2: </strong>{{ $jurado->nombres_miembro1 }} {{ $jurado->apellidos_miembro1 }}<br>
+                                                                      <strong>Miembro 3: </strong>{{ $jurado->nombres_miembro2 }} {{ $jurado->apellidos_miembro2 }}
+                                                                  </td>
+                                                                  <td>{{ date('d/m/Y', strtotime($jurado->created_at)) }}</td>
+                                                                  <td>{{ date('g:i A', strtotime($jurado->created_at)) }}</td>
+                                                                  <td>
+                                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                                                                        <button style="color: #D68A10;" class="btn btn-link btn-flat btn-sm" data-target="#modal-jurado-proyecto-{{$proyecto[0]->proyecto_id}}" data-toggle="modal" data-placement="top" title="Editar"><span class="glyphicon glyphicon-edit"></span></button>
+                                                                        @include('vendor.adminlte.proyectos.modaleditarjurado')
+                                                                    </div>
+                                                                  </td>
+                                                              </tr>
+                                                          @endforeach
+                                                      </tbody>
+                                                  </table>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa fa-user bg-aqua"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
+                                    <h3 class="timeline-header"><strong>INVITACIÓN DE JURADO</strong></h3>
+                                    <div class="timeline-body">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <a class="btn btn-app bg-blue" href="{{ route('invitacionJurado', $proyecto[0]->proyecto_id) }}" target="_blank" >
+                                                    <i class="fa fa-cloud-download"></i> Descargar
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
                               <li>
                                   <i class="fa fa-user bg-aqua"></i>
                                   <div class="timeline-item">
                                       <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
-                                      <h3 class="timeline-header"><strong>PENDIENTE POR EVALUACION DE JURADO</strong></h3>
-                                      @if(count($jurado))
-                                          @foreach($jurado as $jurado)
+                                      <h3 class="timeline-header"><strong>PENDIENTE POR EVALUACIÓN DE JURADO</strong></h3>
+                                      @if(count($jurados))
+                                          @foreach($jurados as $jurado)
                                               {{-- @if($jurado->estado == 'aprobado') --}}
-                                                  @if(Auth::user()->id == $jurado->presidente || $proyecto[0]->coordinador_user_id == Auth::user()->id)
+                                                  {{-- @if(Auth::user()->id == $jurado->presidente || $proyecto[0]->coordinador_user_id == Auth::user()->id) --}}
                                                       <div class="timeline-body">
                                                           <div class="row">
                                                               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -978,7 +1040,7 @@
                                                                   				</div>
                                                                   				<div class="modal-footer">
                                                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                                                <button type="submit" class="btn btn-success btn-flat btn-block" v-on:click="loader"><strong>CONFIRMAR</strong></button>
+                                                                                <button type="submit" class="btn btn-success btn-flat btn-block" ><strong>CONFIRMAR</strong></button>
                                                                             </div>
                                                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                                                 <button type="button" class="btn btn-danger btn-flat btn-block" data-dismiss="modal"><strong>CANCELAR</strong></button>
@@ -991,7 +1053,7 @@
                                                               </div>
                                                           </div>
                                                       </div>
-                                                  @endif
+                                                  {{-- @endif --}}
                                               {{-- @endif --}}
                                           @endforeach
                                       @endif
@@ -1048,22 +1110,38 @@
                               </li>
                           @endif
                           @if($estado->nombre == 'aprobado_evaluacion_jurado' || $estado->nombre == 'aprobado_observaciones_evaluacion_jurado')
-                              <li>
-                                  <i class="fa fa-user bg-aqua"></i>
-                                  <div class="timeline-item">
-                                      <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
-                                      <h3 class="timeline-header"><strong>ACTA DE VEREDICTO</strong></h3>
-                                      <div class="timeline-body">
-                                          <div class="row">
-                                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                  <a class="btn btn-app bg-blue" href="" target="_blank" v-on:click="loader">
-                                                      <i class="fa fa-cloud-download"></i> Descargar
-                                                  </a>
-                                              </div>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </li>
+                            <li>
+                                <i class="fa fa-user bg-aqua"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
+                                    <h3 class="timeline-header"><strong>HOJA CRITERIOS DE EVALUACIÓN</strong></h3>
+                                    <div class="timeline-body">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <a class="btn btn-app bg-blue" @if($proyecto[0]=="pasantia") href="{{ route('criteriop') }}" @else href="{{ route('criteriot') }}" @endif target="_blank" >
+                                                    <i class="fa fa-cloud-download"></i> Descargar
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <i class="fa fa-user bg-aqua"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fa fa-clock-o"></i> {{ date('g:i A', strtotime($estado->created_at)) }}</span>
+                                    <h3 class="timeline-header"><strong>ACTA DE APROBACIÓN</strong></h3>
+                                    <div class="timeline-body">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <a class="btn btn-app bg-blue" href="{{route('aprobacionap',$proyecto[0]->proyecto_id)}}" target="_blank" >
+                                                    <i class="fa fa-cloud-download"></i> Descargar
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
                               {{-- <li>
                                   <i class="fa fa-user bg-aqua"></i>
                                   <div class="timeline-item">
@@ -1072,7 +1150,7 @@
                                       <div class="timeline-body">
                                           <div class="row">
                                               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                  <a class="btn btn-app bg-blue" href="" target="_blank" v-on:click="loader">
+                                                  <a class="btn btn-app bg-blue" href="" target="_blank" >
                                                       <i class="fa fa-cloud-download"></i> Descargar
                                                   </a>
                                               </div>

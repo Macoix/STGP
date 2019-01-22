@@ -32,6 +32,7 @@ class Proyectos extends Migration
         $table->integer('proyecto_estado_id')->unsigned();
         $table->integer('user_id')->unsigned();
         $table->integer('second_user_id');
+        $table->integer('calendario_id')->unsigned()->nullable();
         $table->timestamps();
       });
     }

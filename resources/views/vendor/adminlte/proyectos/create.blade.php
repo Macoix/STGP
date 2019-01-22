@@ -9,7 +9,7 @@
                 <div class="box-header with-border">
                     <h3 class="box-title"><strong>NUEVO PROYECTO</strong></h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                        <button type="button" class="btnn btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
                                 title="Collapse">
                         <i class="fa fa-minus"></i></button>
                     </div>
@@ -19,7 +19,7 @@
                 <div class="box-body">
                   <div class="row">
                       <div class="col-sm-6 col-xs-12">
-                          <a class="btn btn-app bg-red" href="{{ route('proyectos.index') }}" v-on:click="loader">
+                          <a class="btn btn-app bg-red" href="{{ route('proyectos.index') }}" >
                               <i class="fa fa-reply"></i> Volver
                           </a>
                       </div>
@@ -28,7 +28,7 @@
                       <hr style="margin:0 0 10px 0;">
                   </div>
                   <form class="" action="{{route('proyectos.store')}}" method="post" enctype="multipart/form-data">
-                    {{ csrf_field() }}
+                    @csrf
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="form-group{{ $errors->has('fact_1') ? ' has-warning' : '' }}">
@@ -79,7 +79,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="form-group{{ $errors->has('tutor_user_id') ? ' has-warning' : '' }}">
                                     <label>TUTOR</label>
-                                    <select id="selectTutor" class="form-control" name="tutor">
+                                    <select id="select" class="form-control" name="tutor">
                                       <option value="" selected>Seleccionar</option>
                                       @foreach ($tutores as $tutor)
                                         <option value="{{ $tutor->id }}">{{ $tutor->users->nombre }} {{ $tutor->users->apellido }}</option>
@@ -182,14 +182,14 @@
                                           <div class="modal-body">
                                               <div class="row">
                                                   <div class="col-xs-12 text-center">
-                                                      <h4><strong>¿SEGURDO QUE DESEA GUARDAR?</strong></h4>
+                                                      <h4><strong>¿SEGURO QUE DESEA GUARDAR?</strong></h4>
                                                   </div>
                                               </div>
                                           </div>
                                           <div class="modal-footer">
 
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <button type="submit" class="btn btn-success btn-flat btn-block" v-on:click="loader"><strong>CONFIRMAR</strong></button>
+                                                <button type="submit" class="btn btn-success btn-flat btn-block" ><strong>CONFIRMAR</strong></button>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <button type="button" class="btn btn-danger btn-flat btn-block" data-dismiss="modal"><strong>CANCELAR</strong></button>

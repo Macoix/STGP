@@ -16,7 +16,7 @@
               <div class="box-body">
                   <div class="row">
                       <div class="col-sm-6 col-xs-12">
-                          <a class="btn btn-app bg-red" href="{{ route('proyectos.show', $proyecto[0]->proyecto_id) }}" v-on:click="loader">
+                          <a class="btn btn-app bg-red" href="{{ route('proyectos.show', $proyecto[0]->proyecto_id) }}" >
                               <i class="fa fa-reply"></i> Volver
                           </a>
                       </div>
@@ -26,7 +26,7 @@
                   </div>
 
                   <form class="" action="{{ route('proyectos.update',$proyecto[0]->proyecto_id) }}" method="post" enctype="multipart/form-data">
-                    {{ csrf_field() }}
+                    @csrf
                     <div class="row">
                         <div class="col-sm-6 col-xs-12">
                             <h5><strong>AUTOR:</strong> {{ $proyecto[0]->nombres_autor }} {{ $proyecto[0]->apellidos_autor }}</h5>
@@ -181,7 +181,7 @@
                                           <div class="modal-footer">
 
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <button type="submit" class="btn btn-success btn-flat btn-block" v-on:click="loader"><strong>CONFIRMAR</strong></button>
+                                                <button type="submit" class="btn btn-success btn-flat btn-block" ><strong>CONFIRMAR</strong></button>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <button type="button" class="btn btn-danger btn-flat btn-block" data-dismiss="modal"><strong>CANCELAR</strong></button>

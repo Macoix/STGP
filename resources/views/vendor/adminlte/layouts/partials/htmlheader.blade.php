@@ -1,13 +1,16 @@
 <head>
     <meta charset="UTF-8">
-    <title> STGP-UJAP - @yield('title') </title>
+    <title> STGP-UJAP | @yield('title') </title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link href="{{ mix('/css/all.css') }}" rel="stylesheet" type="text/css" />
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{asset('/css/loader.css')}}">
+    <link href="{{asset('select2/dist/css/select2.css')}}" rel="stylesheet" />
+    <link rel="stylesheet" href="plugins/fullcalendar/fullcalendar.css">
+    <link rel="stylesheet" type="text/css" href="plugins/DataTables/datatables.min.css"/>
+    {{-- <link rel="stylesheet" href="plugins/fullcalendar/fullcalendar.print.css"> --}}
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

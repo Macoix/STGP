@@ -8,7 +8,7 @@ class Carrera extends Model
 {
   protected $fillable = [
     'id',
-    'nombre',
+    'name',
     'acronimo',
     'coordinador_user_id',
     'estado',

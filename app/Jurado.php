@@ -13,4 +13,14 @@ class Jurado extends Model
     'carrera_id',
     'user_id',
   ];
+
+  public function users()
+  {
+    return $this->belongsTo('App\User','user_id');
+  }
+
+  public function carrera()
+  {
+    return $this->belongsTo('App\Carrera','carrera_id');
+  }
 }

@@ -22,7 +22,7 @@
 
                           <div class="row">
                               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                  <a class="btn btn-app bg-red" href="{{ route('proyectos.show', $proyecto->proyecto_id) }}" v-on:click="loader">
+                                  <a class="btn btn-app bg-red" href="{{ route('proyectos.show', $proyecto->proyecto_id) }}" >
                                       <i class="fa fa-reply"></i> Anterior
                                   </a>
                               </div>
@@ -86,7 +86,7 @@
                                     <button class="btn btn-app bg-yellow" type="reset">
                                         <i class="fa fa-paint-brush"></i> Limpiar
                                     </button>
-                                    <button class="btn btn-app bg-green" type="submit" v-on:click="loader">
+                                    <button class="btn btn-app bg-green" type="submit" >
                                         <i class="fa fa-save"></i> Guardar
                                     </button>
                                 </div>

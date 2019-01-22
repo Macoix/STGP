@@ -95,5 +95,41 @@ class DatabaseSeeder extends Seeder
           'estado' => 'en curso',
         ]
       ]);
+
+      DB::table('decanos')->insert([
+        [
+          'nombre' => 'Zulay',
+          'apellido' => 'Salcedo',
+          'numero_identificacion' => '000000000',
+         ]
+      ]);
+      DB::table('jurados')->insert([
+        [
+          'carrera_id' => 1,
+          'user_id' => 1,
+        ],
+        [
+          'carrera_id' => 1,
+          'user_id' => 2,
+        ],
+        [
+          'carrera_id' => 1,
+          'user_id' => 3,
+        ]
+      ]);
+      DB::table('comites')->insert([
+        [
+          'carrera_id' => 1,
+          'user_id' => 1,
+        ],
+        [
+          'carrera_id' => 1,
+          'user_id' => 2,
+        ],
+        [
+          'carrera_id' => 1,
+          'user_id' => 3,
+        ]
+      ]);
     }
 }

@@ -18,7 +18,7 @@
                   <div class="row">
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                           {{-- @can('create_users') --}}
-                              <a class="btn btn-app bg-blue" href="{{route('user.index')}}" v-on:click="loader">
+                              <a class="btn btn-app bg-blue" href="{{route('user.index')}}" >
                                   <i class="fa fa-reply"></i> Volver
                               </a>
                           {{-- @endcan --}}

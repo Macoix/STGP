@@ -24,6 +24,7 @@ class Proyectos extends Model
     'proyecto_estado_id',
     'user_id',
     'second_user_id',
+    'calendario_id',
 
   ];
   public function carrera()

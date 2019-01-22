@@ -2,7 +2,7 @@
 @section('title','Lista de usuarios')
 @section('main-content')
   @section('contentheader_title','USUARIOS')
-  <div id="app" class="container">
+  <div id="app">
       {{-- @include('back_office.pages.panel_control.access.usuarios.common.header') --}}
       <section class="content">
           {{-- @include('back_office.includes.notifications') --}}
@@ -23,9 +23,9 @@
                   <div class="row">
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                           {{-- @can('create_users') --}}
-                              <a class="btn btn-app bg-green" href="{{ route('user.create')}}" v-on:click="loader">
-                                  <i class="fa fa-plus"></i> Nuevo
-                              </a>
+                          <button class="btn btn-app bg-green" data-target="#modal-nuevo-user" data-toggle="modal" data-placement="top" title="Nuevo"><span class="fa fa-plus"></span>Nuevo</button>
+                              @include('vendor.adminlte.user.modalnuevo')
+
                           {{-- @endcan --}}
                       </div>
                   </div>
@@ -48,7 +48,7 @@
                                   {{-- @if(count($users)) --}}
                                       <div class="col-xs-12">
                                           <div class="table-responsive">
-                                              <table class="table table-condensed table-hover">
+                                              <table class="table table-condensed table-hover" id="table">
                                                   <thead>
                                                       <th>ID</th>
                                                       <th>NOMBRE</th>
@@ -81,13 +81,14 @@
                                                                   </div>
                                                                   {{-- @can('edit_users') --}}
                                                                       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                                          <a style="color: #D68A10;" class="btn btn-link btn-flat btn-sm" href="{{ route('user.edit',$user->id) }}" data-placement="top" title="EDITAR"><span class="glyphicon glyphicon-edit"></span></a>
+                                                                          <button style="color: #D68A10;" class="btn btn-link btn-flat btn-sm" data-target="#modal-user-{{ $user->id }}" data-toggle="modal" data-placement="top" title="Editar"><span class="glyphicon glyphicon-edit"></span></button>
+                                                                          @include('vendor.adminlte.user.modal')
                                                                       </div>
                                                                   {{-- @endcan --}}
                                                                   {{-- @can('delete_users') --}}
                                                                       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                                          <button style="color: #C34233" class="btn btn-link btn-flat btn-sm" data-target="#modal-delete-{{ $user->user_id }}" data-toggle="modal" data-placement="top" title="ELIMINAR" @if($user->id == 1) disabled @endif><span class="glyphicon glyphicon-remove"></span></button>
-                                                                          {{-- @include('back_office.pages.panel_control.access.usuarios.modal_delete') --}}
+                                                                          <button style="color: #C34233" class="btn btn-link btn-flat btn-sm" data-target="#modal-delete-{{ $user->id }}" data-toggle="modal" data-placement="top" title="ELIMINAR" @if($user->id == 1) disabled @endif><span class="glyphicon glyphicon-remove"></span></button>
+                                                                          @include('vendor.adminlte.user.modaldelete')
                                                                       </div>
                                                                   {{-- @endcan --}}
                                                               </td>

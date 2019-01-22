@@ -17,9 +17,12 @@ class CarrerasController extends Controller
     public function index()
     {
         $carreras = Carrera::where('estado','!=','eliminado')
-        ->paginate(5);
+        ->get();
+        $profesores = User::select('id', 'nombre', 'apellido')
+            ->where('rol_id', '!=', 5)
+            ->get();
 
-        return view('vendor.adminlte.carreras.index',compact('carreras'));
+        return view('vendor.adminlte.carreras.index',compact('carreras', 'profesores'));
     }
 
     public function getTutores(Request $request,$id){
@@ -54,7 +57,7 @@ class CarrerasController extends Controller
     {
       $carreras = new Carrera;
       $carreras->fill([
-        'nombre' => $request['nombre'],
+        'name' => $request['nombre'],
         'acronimo' => $request['acronimo'],
         'coordinador_user_id' => $request['coordinador_id'],
         'estado' => $request['estado']
@@ -62,7 +65,7 @@ class CarrerasController extends Controller
       // dd($carreras);
       $carreras->save();
 
-      return redirect()->to('carreras');
+      return redirect()->route('carreras.index');
     }
 
     /**
@@ -103,12 +106,12 @@ class CarrerasController extends Controller
     {
       $carrera->update([
         'nombre' => $request['nombre'],
-        'acronimo' => $request['acronimo'],
-        'coordinador_user_id' => $request['coordinador_id'],
+        'acronimo' => $request['apellido'],
+        'coordinador_user_id' => $request['numero'],
         'estado' => $request['estado']
       ]);
 
-      return redirect()->to('carreras');
+      return redirect()->route('carreras.index');
     }
 
     /**

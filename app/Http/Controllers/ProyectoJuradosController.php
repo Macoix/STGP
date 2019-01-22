@@ -44,4 +44,17 @@ class ProyectoJuradosController extends Controller
 
       return redirect()->route('proyectos.show',$id);
   }
+
+  public function update(Request $request, $id)
+  {
+
+    $jurados = ProyectoJurados::where('proyecto_id', $id)
+    ->first();
+    $jurados->presidente_user_id = $request->presidente_user_id;
+    $jurados->miembro1_user_id = $request->miembro1_user_id;
+    $jurados->miembro2_user_id = $request->miembro2_user_id;
+      // dd($jurados);
+    $jurados->save();
+    return redirect()->route('proyectos.show',$id);
+  }
 }

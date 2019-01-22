@@ -17,8 +17,13 @@ class TutoresController extends Controller
     public function index()
     {
       $tutores = Tutores::All();
+      $users = User::select('id', 'nombre', 'apellido')
+          ->where('rol_id', '!=', 5)
+          ->get();
+      $carreras = Carrera::where('estado','!=','eliminado')
+      ->get();
 
-      return view('vendor.adminlte.tutores.index',compact('tutores'));
+      return view('vendor.adminlte.tutores.index',compact('tutores', 'users','carreras'));
     }
 
     /**
@@ -88,7 +93,13 @@ class TutoresController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $tutores = Tutores::where('id',$id)
+      ->first();
+      // dd($tutores);
+      $tutores->carrera_id = $request['carreraid'];
+      // dd($tutores->carrera_id);
+      $tutores->save();
+      return redirect()->route('tutor.index');
     }
 
     /**

@@ -2,7 +2,7 @@
 @section('title','Lista de proyectos')
 @section('main-content')
   @section('contentheader_title', 'PROYECTOS')
-  <div id="app" class="container">
+  <div id="app">
       {{-- @include('back_office.pages.panel_control.access.usuarios.common.header') --}}
       <section class="content">
           {{-- @include('back_office.includes.notifications') --}}
@@ -23,9 +23,8 @@
                   <div class="row">
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                           {{-- @can('create_users') --}}
-                              <a class="btn btn-app bg-green" href="proyectos/crear" v-on:click="loader">
-                                  <i class="fa fa-plus"></i> Nuevo
-                              </a>
+                          <button class="btnn btn btn-app bg-green" data-target="#modal-nuevo-proyecto" data-toggle="modal" data-placement="top" title="Nuevo"><span class="fa fa-plus"></span>Nuevo</button>
+                              @include('vendor.adminlte.proyectos.modalnuevo')
                           {{-- @endcan --}}
                       </div>
                   </div>
@@ -48,7 +47,7 @@
                                           </div>
                                         @else
                                           <div class="table-responsive">
-                                              <table class="table table-condensed table-hover">
+                                              <table class="table table-condensed table-hover" id="table">
                                                   <thead>
                                                       <th>Codigo</th>
                                                       <th>FECHA</th>
@@ -66,7 +65,7 @@
                                                               <td>{{ date('d/m/Y', strtotime($proyecto->created_at)) }}</td>
                                                               <td>{{ $proyecto->carrera->name }}</td>
                                                               <td>{{ $proyecto->titulo }}</td>
-                                                              <td>{{ $proyecto->autor->nombre }} {{ $proyecto->autor->apellido }}</td>
+                                                              <td>{{ $proyecto->autor->nombre }}<br>{{ $proyecto->autor->apellido }}</td>
                                                               <td>{{$proyecto->coautor->nombre}}<br>{{ $proyecto->coautor->apellido }}</td>
                                                               <!--<td>
                                                                   @if($proyecto->estado == 'pendiente_evaluacion_comite')
@@ -92,9 +91,9 @@
                                                                       <a class="btn btn-link btn-flat btn-md" href="{{route('proyectos.show',$proyecto->proyecto_id)}}" data-placement="top" title="DETALLES"><span class="glyphicon glyphicon-eye-open"></span></a>
                                                                   </div>
                                                                   {{-- @can('edit_proyectos') --}}
-                                                                      <div class="col-sm-4 col-xs-12">
-                                                                          <a style="color: #D68A10;" class="btn btn-link btn-flat btn-md" href="" data-placement="top" title="EDITAR"><span class="glyphicon glyphicon-edit"></span></a>
-                                                                      </div>
+                                                                      {{-- <div class="col-sm-4 col-xs-12">
+                                                                        &nbsp;
+                                                                      </div> --}}
                                                                   {{-- @endcan --}}
                                                                   {{-- @can('delete_proyectos') --}}
                                                                       <div class="col-sm-4 col-xs-12">

@@ -1,6 +1,6 @@
 <template>
  <form method="post" @submit.prevent="submit" @keydown="clearErrors($event.target.name)">
-  <div class="alert alert-success text-center" v-show="form.succeeded" id="result"> ¿Exito! <i class="fa fa-refresh fa-spin"></i> Entrando!</div>
+  <div class="alert alert-success text-center" v-show="form.succeeded" id="result"> ¡Exito! <i class="fa fa-refresh fa-spin"></i> Entrando!</div>
   <div class="form-group has-feedback" :class="{ 'has-error': form.errors.has('email') }" v-if="type === 'email'">
    <input type="email" class="form-control" :placeholder="placeholder" :name="name" value="" v-model="form.email" @change="adddomain" autofocus/>
    <span class="glyphicon form-control-feedback" :class="[icon]"></span>
@@ -34,7 +34,7 @@
     </div>
    </div>
    <div class="col-xs-4">
-    <button type="submit" class="btn btn-primary btn-block btn-flat" v-text="Entrar" :disabled="form.errors.any()"><i v-if="form.submitting" class="fa fa-refresh fa-spin"></i></button>
+    <button type="submit" class="btn btn-primary btn-block btn-flat" v-text="" :disabled="form.errors.any()"><i v-if="form.submitting" class="fa fa-refresh fa-spin"></i>Entrar</button>
    </div>
   </div>
  </form>

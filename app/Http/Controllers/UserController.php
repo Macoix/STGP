@@ -16,10 +16,11 @@ class UserController extends Controller
     public function index()
     {
         // ´$users = User::select('user_id', 'name', 'email');
-        $users = User::where('estado','!=','inactivo')
-        ->paginate(5);
-
-        return view('vendor.adminlte.user.index', compact('users'));
+        $users = User::where('estado','!=','eliminado')
+        ->get();
+        $roles = Roles::all();
+        // dd($roles);
+        return view('vendor.adminlte.user.index', compact('users', 'roles'));
     }
 
     /**
@@ -115,6 +116,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $user = User::findOrFail($id);
+      $user->estado = 'eliminado';
+      $user->update();
+
+      return redirect()->route('user.index');
     }
 }
